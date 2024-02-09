@@ -5,12 +5,12 @@ import time
 import email
 import imaplib
 import requests
-import playwright
 import requests
 from datetime import datetime, timedelta
 from configparser import ConfigParser
 from playwright.sync_api import expect, sync_playwright
-from PIL import Image, ImageChops
+from data_logger.data_logger import DataLogger
+logger = DataLogger.get_logger(__name__)
 
 
 proxy_host = "zproxy.lum-superproxy.io"

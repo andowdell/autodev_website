@@ -211,7 +211,6 @@ class AllianzExtractor:
         ret_car['data'] = car_data
         print('[Downloader][ALLIANZ][%s] New auction downloaded' % ret_car['provider_id'])
         with open(car_json_path, 'w') as f:
-            print(ret_car["images"])
             json.dump(ret_car, f)
     
     def _is_main_page(self):
