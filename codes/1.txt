@@ -1,0 +1,229 @@
+[Downloader] Started downloading updates...
+[Downloader][ALLIANZ] Start downloading...
+[Downloader][AXA] Start downloading...
+[Downloader][ALLIANZ][201039] New auction downloaded
+MERCEDES-BENZ C 350 CDI BlueEff. Avantgarde 4Matic 7G-Tronic, 231 PS ['id_17152.jpg', 'id_17157.jpg', 'id_17154.jpg', 'id_17159.jpg']
+[Downloader][AXA][242900] New auction downloaded
+VW Caddy 1.2TSI Entry, 86 PS ['id_742380.jpg', 'id_742367.jpg', 'id_742373.jpg', 'id_742378.jpg']
+[Downloader][ALLIANZ][200991] New auction downloaded
+BMW 316d Touring Business Steptronic, 116 PS ['id_16321.jpg', 'id_16323.jpg', 'id_16319.jpg', 'id_16316.jpg']
+[Downloader][ALLIANZ][200988] New auction downloaded
+BMW X2 sDrive 20i Steptronic DSK, 192 PS ['id_16265.jpg', 'id_16268.jpg', 'id_16267.jpg', 'id_16272.jpg']
+[Downloader][ALLIANZ][200979] New auction downloaded
+Citroën C4 1,6 e-HDi ['id_16111.jpg', 'id_16119.jpg', 'id_16106.jpg', 'id_16112.jpg']
+[Downloader][AXA][242490] New auction downloaded
+PEUGEOT 308 CC 1.6 T Platinum, 156 PS ['id_744924.jpg', 'id_744928.jpg', 'id_744933.jpg', 'id_744939.jpg']
+[Downloader][ALLIANZ][200981] New auction downloaded
+Ford Explorer 3,0 EcoB ST-Line 3.0, 457 PS ['id_16134.jpg', 'id_16140.jpg', 'id_16141.jpg', 'id_16135.jpg']
+[Downloader][ALLIANZ][200982] New auction downloaded
+Ford Focus 2,0i Ghia, 145 PS ['id_16159.jpg', 'id_16158.jpg', 'id_16154.jpg', 'id_16156.jpg']
+[Downloader][AXA][242532] New auction downloaded
+ VW Passat 2.0 TDI Comfort, 140 PS ['id_744737.jpg', 'id_744735.jpg', 'id_744731.jpg', 'id_744743.jpg']
+[Downloader][ALLIANZ][201006] New auction downloaded
+FORD Mondeo 2.0 TDCi 16V Titanium Automatic, 130 PS ['id_16556.jpg', 'id_16559.jpg', 'id_16563.jpg', 'id_16561.jpg']
+[Downloader][ALLIANZ][200992] New auction downloaded
+Ford S-Max 2.0 TDCi, 140 PS ['id_16342.jpg', 'id_16341.jpg', 'id_16340.jpg', 'id_16334.jpg']
+[Downloader][AXA][242556] New auction downloaded
+ JEEP Cherokee 2.8 CRD Renegade, 150 PS ['id_745031.jpg', 'id_745028.jpg', 'id_745027.jpg', 'id_745024.jpg']
+[Downloader][ALLIANZ][200983] New auction downloaded
+Kia Cee'd Sportswagon 1,6 GDi, 135 PS ['id_16170.jpg', 'id_16168.jpg', 'id_16167.jpg', 'id_16162.jpg']
+[Downloader][ALLIANZ][200998] New auction downloaded
+Mercedes-Benz A-Klasse A 200 CDI Urban, 136 PS ['id_16423.jpg', 'id_16433.jpg', 'id_16440.jpg', 'id_16436.jpg']
+[Downloader][AXA][242534] New auction downloaded
+CITROEN C4 1.2 Pure Tech Shine, 131 PS ['id_744546.jpg', 'id_744545.jpg', 'id_744549.jpg', 'id_744550.jpg']
+[Downloader][ALLIANZ][200980] New auction downloaded
+Mitsubishi ASX 1,8 DID Intense, 150 PS ['id_16127.jpg', 'id_16124.jpg', 'id_16125.jpg', 'id_16126.jpg']
+[Downloader][AXA][242678] New auction downloaded
+CHEVROLET Orlando 2.0 VCDi LT, 163 PS ['id_744949.jpg', 'id_744942.jpg', 'id_744952.jpg', 'id_744953.jpg']
+[Downloader][ALLIANZ][200993] New auction downloaded
+Opel Meriva A 1.8i 16V ['id_16355.jpg', 'id_16354.jpg', 'id_16349.jpg', 'id_16348.jpg']
+[Downloader][ALLIANZ][200985] New auction downloaded
+Opel Zafira B 1.9 CDTI Cosmo ['id_16221.jpg', 'id_16227.jpg', 'id_16226.jpg', 'id_16223.jpg']
+[Downloader][AXA][242894] New auction downloaded
+SKODA Octavia Combi 2.0 TDI Ambition 4x4, 150 PS ['id_742089.jpg', 'id_742092.jpg', 'id_742094.jpg', 'id_742093.jpg']
+[Downloader][ALLIANZ][200995] New auction downloaded
+Peugeot 308 II 1.5 BlueHDI Allure, 131 PS ['id_16375.jpg', 'id_16378.jpg', 'id_16382.jpg', 'id_16374.jpg']
+[Downloader][ALLIANZ][200984] New auction downloaded
+PIAGGIO Medley 125 IGet RST ['id_16184.jpg', 'id_16190.jpg', 'id_16183.jpg', 'id_16185.jpg']
+[Downloader][AXA][242897] New auction downloaded
+OPEL 1.6CDTI eco 2.7 L1, 90 PS ['id_742279.jpg', 'id_742288.jpg', 'id_742286.jpg', 'id_742283.jpg']
+[Downloader][ALLIANZ][200987] New auction downloaded
+Seat Alhambra 2.0 TDI Style Advanced ['id_16253.jpg', 'id_16258.jpg', 'id_16246.jpg', 'id_16251.jpg']
+[Downloader][ALLIANZ][200999] New auction downloaded
+Skoda Fabia 1.4 TSI RS DSG, 180 PS ['id_16453.jpg', 'id_16446.jpg', 'id_16454.jpg', 'id_16448.jpg']
+[Downloader][AXA][242503] New auction downloaded
+RENAULT Trafic 1.9 dCi 100 2.7t, 100 PS ['id_745059.jpg', 'id_745060.jpg', 'id_745055.jpg', 'id_745054.jpg']
+[Downloader][ALLIANZ][201004] New auction downloaded
+SKODA Octavia Combi 1.2 TSI Active DSG, 105 PS ['id_16508.jpg', 'id_16525.jpg', 'id_16518.jpg', 'id_16509.jpg']
+[Downloader][AXA][242927] New auction downloaded
+VW Golf 2.0 TDI Sport 4M., 140 PS ['id_743272.jpg', 'id_743265.jpg', 'id_743269.jpg', 'id_743275.jpg']
+[Downloader][AXA][242564] New auction downloaded
+PEUGEOT 208 1.2 PureTech Allure, 110 PS ['id_745121.jpg', 'id_745131.jpg', 'id_745129.jpg', 'id_745130.jpg']
+[Downloader][AXA][242533] New auction downloaded
+SKODA Scala 1.5 TSI Monte Carlo, 150 PS ['id_744506.jpg', 'id_744491.jpg', 'id_744493.jpg', 'id_744501.jpg']
+[Downloader][AXA][242843] New auction downloaded
+AUDI SQ8 TFSI quattro, 508 PS ['id_741774.jpg', 'id_741770.jpg', 'id_741762.jpg', 'id_741769.jpg']
+[Downloader][AXA][242531] New auction downloaded
+KAWASAKI Z 900, 125 PS ['id_745544.jpg', 'id_745550.jpg', 'id_745547.jpg', 'id_745542.jpg']
+[Downloader][AXA][242543] New auction downloaded
+PEUGEOT 308 SW 1.5BHDI AllureEAT8, 130 PS ['id_745559.jpg', 'id_745551.jpg', 'id_745561.jpg', 'id_745560.jpg']
+[Downloader][AXA][242547] New auction downloaded
+VW Passat 1.9 TDI Comfort, 130 PS ['id_745653.jpg', 'id_745640.jpg', 'id_745647.jpg', 'id_745643.jpg']
+[Downloader][AXA][242880] New auction downloaded
+Dohan Uranus 1, 4 PS ['id_746238.jpg', 'id_746242.jpg', 'id_746231.jpg', 'id_746237.jpg']
+[Downloader][AXA][242574] New auction downloaded
+BMW 116i Business, 109 PS ['id_746636.jpg', 'id_746634.jpg', 'id_746635.jpg', 'id_746642.jpg']
+[Downloader][ALLIANZ][200989] New auction downloaded
+SUZUKI SX4 1.6 16V GL Top 2WD Automatic, 120 PS ['id_16289.jpg', 'id_16288.jpg', 'id_16290.jpg', 'id_16281.jpg']
+[Downloader][ALLIANZ][200978] New auction downloaded
+Suzuki SX4 S-Cross 1,6 16V Compact Top, 120 PS ['id_16071.jpg', 'id_16070.jpg', 'id_16064.jpg', 'id_16061.jpg']
+[Downloader][AXA][242448] New auction downloaded
+Mofa Pony  GTX Pony  GTX ['id_745154.jpg', 'id_745152.jpg', 'id_745153.jpg', 'id_745159.jpg']
+[Downloader][ALLIANZ][201000] New auction downloaded
+VOLVO V60 D3 Momentum Geartronic, 136 PS ['id_16474.jpg', 'id_16482.jpg', 'id_16481.jpg', 'id_16477.jpg']
+[Downloader][ALLIANZ][200994] New auction downloaded
+VW Golf Variant 1.2 TSI Trendline, 105 PS ['id_16363.jpg', 'id_16366.jpg', 'id_16370.jpg', 'id_16369.jpg']
+[Downloader][AXA][242559] New auction downloaded
+VW Tiguan 2.0TSI High 4M, 180 PS ['id_745137.jpg', 'id_745138.jpg', 'id_745142.jpg', 'id_745139.jpg']
+[Downloader][ALLIANZ][200990] New auction downloaded
+VW Polo 1.2 12V Trendline, 69 PS ['id_16304.jpg', 'id_16301.jpg', 'id_16294.jpg', 'id_16303.jpg']
+[Downloader][ALLIANZ][201043] New auction downloaded
+Aebi TP 45 Landw. Motorkarren, 39 PS ['id_17217.jpg', 'id_17218.jpg', 'id_17222.jpg', 'id_17225.jpg']
+[Downloader][ALLIANZ][201023] New auction downloaded
+Alfa Romeo Stelvio 2.2 JTDM Q4, 190 PS ['id_16881.jpg', 'id_16926.jpg', 'id_16893.jpg', 'id_16883.jpg']
+[Downloader][AXA][242562] New auction downloaded
+VW Polo 1.4 TSI GTI, 180 PS ['id_745105.jpg', 'id_745095.jpg', 'id_745099.jpg', 'id_745109.jpg']
+[Downloader][ALLIANZ][201038] New auction downloaded
+APRILIA SX 125, 15 PS ['id_17137.jpg', 'id_17134.jpg', 'id_17133.jpg', 'id_17141.jpg']
+[Downloader][ALLIANZ][201033] New auction downloaded
+Audi A5 Sportback 2.0TDI quattro S-tronic, 190 PS ['id_17054.jpg', 'id_17049.jpg', 'id_17058.jpg', 'id_17050.jpg']
+[Downloader][AXA][242558] New auction downloaded
+SKODA Octavia 1.8TSI L&K 4x4, 180 PS ['id_745165.jpg', 'id_745164.jpg', 'id_745166.jpg', 'id_745167.jpg']
+[Downloader][ALLIANZ][201007] New auction downloaded
+BMW 2er Gran Coupé 220i, 178 PS ['id_16588.jpg', 'id_16593.jpg', 'id_16589.jpg', 'id_16585.jpg']
+[Downloader][ALLIANZ][201040] New auction downloaded
+BMW X3 M40i xDrive 3.0, 360 PS ['id_17170.jpg', 'id_17168.jpg', 'id_17173.jpg', 'id_17162.jpg']
+[Downloader][AXA][242565] New auction downloaded
+SEAT Ibiza 1.4 Style, 85 PS ['id_745252.jpg', 'id_745259.jpg', 'id_745264.jpg', 'id_745248.jpg']
+[Downloader][ALLIANZ][201014] New auction downloaded
+Cadillac Escalade Premium Luxury ['id_16743.jpg', 'id_16739.jpg', 'id_16740.jpg', 'id_16735.jpg']
+[Downloader][ALLIANZ][201031] New auction downloaded
+Dacia Sandero Tce 100 Celebration, 101 PS ['id_17025.jpg', 'id_17027.jpg', 'id_17031.jpg', 'id_17033.jpg']
+[Downloader][AXA][242567] New auction downloaded
+APRILIA SR 50 R (45km/h), 4 PS ['id_745360.jpg', 'id_745363.jpg', 'id_745366.jpg', 'id_745359.jpg']
+[Downloader][ALLIANZ][201003] New auction downloaded
+Fiat Panda 0.9 Twinair Turbo, 86 PS ['id_16505.jpg', 'id_16499.jpg', 'id_16502.jpg', 'id_16496.jpg']
+[Downloader][ALLIANZ][201022] New auction downloaded
+FORD Kuga 2.0 TDCi Titanium S 4WD PowerShift, 163 PS ['id_16875.jpg', 'id_16872.jpg', 'id_16877.jpg', 'id_16871.jpg']
+[Downloader][ALLIANZ][201010] New auction downloaded
+Honda Civic 1.8i Evolution, 140 PS ['id_16678.jpg', 'id_16910.jpg', 'id_16686.jpg', 'id_16679.jpg']
+[Downloader][AXA][242515] New auction downloaded
+Peugeot 208 Signature, 82 PS ['id_745243.jpg', 'id_745244.jpg', 'id_745239.jpg', 'id_745236.jpg']
+[Downloader][ALLIANZ][201015] New auction downloaded
+Honda NSS Forza 125 ['id_16757.jpg', 'id_16759.jpg', 'id_16760.jpg', 'id_16753.jpg']
+[Downloader][ALLIANZ][201027] New auction downloaded
+Karnic SL800 Motorschiff ['id_16969.jpg', 'id_16951.jpg', 'id_16970.jpg', 'id_16958.jpg']
+[Downloader][AXA][242555] New auction downloaded
+MERCEDES-BENZ 316 CDI, 156 PS ['id_745401.jpg', 'id_745393.jpg', 'id_745402.jpg', 'id_745392.jpg']
+[Downloader][ALLIANZ][201024] New auction downloaded
+KAWASAKI Z 400 0.4, 45 PS ['id_16900.jpg', 'id_16896.jpg', 'id_16907.jpg', 'id_16905.jpg']
+[Downloader][ALLIANZ][201029] New auction downloaded
+KTM                DUKE               125               , 15 PS ['id_16997.jpg', 'id_16995.jpg', 'id_16991.jpg', 'id_16987.jpg']
+[Downloader][AXA][242589] New auction downloaded
+FORD Fiesta 1.2i 16V Flair, 75 PS ['id_745930.jpg', 'id_745935.jpg', 'id_745932.jpg', 'id_745923.jpg']
+[Downloader][ALLIANZ][201025] New auction downloaded
+LORRIES Fahrzeugtransportanhänger  S222, 3500RT ['id_16919.jpg', 'id_16913.jpg', 'id_16915.jpg', 'id_16924.jpg']
+[Downloader][ALLIANZ][201034] New auction downloaded
+Mercedes-Benz CLS 350 CGI, 292 PS ['id_17070.jpg', 'id_17074.jpg', 'id_17069.jpg', 'id_17068.jpg']
+[Downloader][ALLIANZ][201026] New auction downloaded
+MINI Cooper S, 184 PS ['id_16931.jpg', 'id_16940.jpg', 'id_16944.jpg', 'id_16934.jpg']
+[Downloader][AXA][242587] New auction downloaded
+DACIA Logan MCV 0.9 Lauréate, 90 PS ['id_745725.jpg', 'id_745716.jpg', 'id_745724.jpg', 'id_745719.jpg']
+[Downloader][ALLIANZ][200997] New auction downloaded
+Nissan TIIDA 1.6 Acenta, 116 PS ['id_16404.jpg', 'id_16416.jpg', 'id_16412.jpg', 'id_16455.jpg']
+[Downloader][ALLIANZ][201020] New auction downloaded
+NISSAN X-Trail 2.0 dCi 16V LE, 173 PS ['id_16833.jpg', 'id_16835.jpg', 'id_16837.jpg', 'id_16839.jpg']
+[Downloader][AXA][242619] New auction downloaded
+PEUGEOT 3008 1.6 16V VTI Active, 120 PS ['id_745951.jpg', 'id_745960.jpg', 'id_745948.jpg', 'id_745956.jpg']
+[Downloader][ALLIANZ][201005] New auction downloaded
+Opel Astra H  Caravan 1.8i 16V, 140 PS ['id_16532.jpg', 'id_16599.jpg', 'id_16533.jpg', 'id_16543.jpg']
+[Downloader][AXA][242457] New auction downloaded
+SMART pulse mhd, 71 PS ['id_743959.jpg', 'id_743960.jpg', 'id_743956.jpg', 'id_743952.jpg']
+[Downloader][AXA][242528] New auction downloaded
+Honda CB 650 R - RH0 ab Modell 2019 CB 650 R 0.6, 48 PS ['id_745384.jpg', 'id_745368.jpg', 'id_745373.jpg', 'id_745381.jpg']
+[Downloader][AXA][242607] New auction downloaded
+BMW 323i, 170 PS ['id_745920.jpg', 'id_745909.jpg', 'id_745902.jpg', 'id_745915.jpg']
+[Downloader][AXA][242586] New auction downloaded
+ MINI Cooper S, 175 PS ['id_745787.jpg', 'id_745783.jpg', 'id_745797.jpg', 'id_745782.jpg']
+[Downloader][AXA][242549] New auction downloaded
+AUDI A3 1.6 TDI Ambition, 105 PS ['id_745672.jpg', 'id_745671.jpg', 'id_745667.jpg', 'id_745676.jpg']
+[Downloader][AXA][242999] New auction downloaded
+RENAULT Twingo 0.9 Zen, 90 PS ['id_745713.jpg', 'id_745703.jpg', 'id_745706.jpg', 'id_745700.jpg']
+[Downloader][ALLIANZ][201008] New auction downloaded
+Opel Insignia ST 2.0 CDTi Active, 160 PS ['id_16613.jpg', 'id_16610.jpg', 'id_16612.jpg', 'id_16609.jpg']
+[Downloader][ALLIANZ][201001] New auction downloaded
+Opel Vivaro 1.6 CDTi  2.7t L1H1, 95 PS ['id_16459.jpg', 'id_16458.jpg', 'id_16463.jpg', 'id_16464.jpg']
+[Downloader][ALLIANZ][201050] New auction downloaded
+PIAGGIO Fly 125 4-T, 10 PS ['id_17316.jpg', 'id_17323.jpg', 'id_17313.jpg', 'id_17314.jpg']
+[Downloader][AXA][242671] New auction downloaded
+SEAT Ibiza 1.0 EcoTSI Style, 115 PS ['id_745780.jpg', 'id_745771.jpg', 'id_745772.jpg', 'id_745778.jpg']
+[Downloader][ALLIANZ][200986] New auction downloaded
+Porsche Macan Turbo PDK 3.6, 400 PS ['id_16237.jpg', 'id_16234.jpg', 'id_16236.jpg', 'id_16238.jpg']
+[Downloader][ALLIANZ][201017] New auction downloaded
+Renault Mégane 1.4 16V Turbo, 131 PS ['id_16776.jpg', 'id_16780.jpg', 'id_16775.jpg', 'id_16788.jpg']
+[Downloader][AXA][242630] New auction downloaded
+KAWASAKI Z 900 RS, 112 PS ['id_745992.jpg', 'id_745976.jpg', 'id_745991.jpg', 'id_745988.jpg']
+[Downloader][ALLIANZ][201018] New auction downloaded
+Renault Trafic 2.0 Energy dCi, 3.0t L2H1, 145 PS ['id_16798.jpg', 'id_16805.jpg', 'id_16794.jpg', 'id_16803.jpg']
+[Downloader][ALLIANZ][201012] New auction downloaded
+Seat Alhambra 2.0 TDI Style 2.0, 177 PS ['id_16717.jpg', 'id_16716.jpg', 'id_16707.jpg', 'id_16715.jpg']
+[Downloader][AXA][243026] New auction downloaded
+MERCEDES-BENZ GLK 220 BlueTEC 4Matic, 170 PS ['id_746134.jpg', 'id_746143.jpg', 'id_746140.jpg', 'id_746145.jpg']
+[Downloader][ALLIANZ][201032] New auction downloaded
+Skoda Fabia  1.2 TSI Ambition, 86 PS ['id_17036.jpg', 'id_17040.jpg', 'id_17037.jpg', 'id_17296.jpg']
+[Downloader][ALLIANZ][201035] New auction downloaded
+Subaru Forester 2.0i Swiss Lineartronic, 150 PS ['id_17090.jpg', 'id_17082.jpg', 'id_17078.jpg', 'id_17077.jpg']
+[Downloader][ALLIANZ][201021] New auction downloaded
+SUBARU Impreza 1.6 Swiss one, 114 PS ['id_16862.jpg', 'id_16852.jpg', 'id_16848.jpg', 'id_16859.jpg']
+[Downloader][AXA][242585] New auction downloaded
+ DACIA Sandero 1.2, 75 PS ['id_745869.jpg', 'id_745871.jpg', 'id_745863.jpg', 'id_745875.jpg']
+[Downloader][ALLIANZ][201019] New auction downloaded
+SUBARU Levorg 2.0i Swiss Plus AWD Lineartronic, 150 PS ['id_16815.jpg', 'id_16821.jpg', 'id_16826.jpg', 'id_16822.jpg']
+[Downloader][ALLIANZ][200996] New auction downloaded
+Suzuki GSF 650 BANDIT, 77 PS ['id_16397.jpg', 'id_16402.jpg', 'id_16396.jpg', 'id_16394.jpg']
+[Downloader][AXA][242741] New auction downloaded
+RENAULT Koleos 2.0 dCi Dynamique 4x4 Automatic, 150 PS ['id_745831.jpg', 'id_745822.jpg', 'id_745833.jpg', 'id_745832.jpg']
+[Downloader][ALLIANZ][201016] New auction downloaded
+Toyota RAV4 2.0 Style ['id_16773.jpg', 'id_16766.jpg', 'id_16768.jpg', 'id_16770.jpg']
+[Downloader][ALLIANZ][201030] New auction downloaded
+Volvo XC 90 D5 AWD Inscription, 224 PS ['id_17002.jpg', 'id_17010.jpg', 'id_17003.jpg', 'id_17005.jpg']
+[Downloader][ALLIANZ][201036] New auction downloaded
+VW  T6  2.0TDI Multivan Comfortline 4motion, 204 PS ['id_17094.jpg', 'id_17091.jpg', 'id_17093.jpg', 'id_17098.jpg']
+[Downloader][AXA][237629] New auction downloaded
+CITROEN C4 Picasso 2.0 HDI Excl, 136 PS ['id_657577.jpg', 'id_657568.jpg', 'id_657582.jpg', 'id_657580.jpg']
+[Downloader][ALLIANZ][201028] New auction downloaded
+VW Golf 1.6 Comfortline, 105 PS ['id_17292.jpg', 'id_16984.jpg', 'id_16980.jpg', 'id_16977.jpg']
+[Downloader][ALLIANZ][201011] New auction downloaded
+VW Golf VI 2.0 TDI ['id_16694.jpg', 'id_16696.jpg', 'id_16705.jpg', 'id_16692.jpg']
+[Downloader][ALLIANZ][201002] New auction downloaded
+VW Golf VI Variant 1.4 TSI Comfortline ['id_16485.jpg', 'id_16489.jpg', 'id_16491.jpg', 'id_16493.jpg']
+[Downloader][AXA][242570] New auction downloaded
+HYUNDAI i20 1.0 T-GDi Amplia, 100 PS ['id_745884.jpg', 'id_745888.jpg', 'id_745889.jpg', 'id_745892.jpg']
+[Downloader][ALLIANZ][201009] New auction downloaded
+VW Golf VII 2.0 TSI GTI, 220 PS ['id_16660.jpg', 'id_16658.jpg', 'id_16654.jpg', 'id_16659.jpg']
+[Downloader][ALLIANZ][201037] New auction downloaded
+VW Polo 1.6 TDI Trendline, 75 PS ['id_17111.jpg', 'id_17128.jpg', 'id_17121.jpg', 'id_17127.jpg']
+[Downloader][AXA][242560] New auction downloaded
+SKODA Octavia 1.8 T Tour, 150 PS ['id_745803.jpg', 'id_745806.jpg', 'id_745813.jpg', 'id_745814.jpg']
+[Downloader][ALLIANZ][201061] New auction downloaded
+Alfa Romeo Stelvio 2.2JTDM Executive Q4, 209 PS ['id_17537.jpg', 'id_17536.jpg', 'id_17534.jpg', 'id_17540.jpg']
+[Downloader][ALLIANZ][201051] New auction downloaded
+BMW 218d Active Tourer, 150 PS ['id_17342.jpg', 'id_17337.jpg', 'id_17346.jpg', 'id_17345.jpg']
+[Downloader][ALLIANZ][201052] New auction downloaded
+BMW 528i  Touring xDrive, 245 PS ['id_17352.jpg', 'id_17355.jpg', 'id_17348.jpg', 'id_17351.jpg']
+[Downloader][AXA][242633] New auction downloaded
+SUZUKI GSX-R 1100 W S 95, 80 PS ['id_746008.jpg', 'id_746000.jpg', 'id_746004.jpg', 'id_746007.jpg']
+[Downloader][AXA][242645] New auction downloaded
+VW Up 1.0 start up, 60 PS ['id_746071.jpg', 'id_746067.jpg', 'id_746063.jpg', 'id_746064.jpg']
+[Downloader][AXA][242404] New auction downloaded
+POLESTAR Polestar 2 Launch Ed, 408 PS ['id_742556.jpg', 'id_742551.jpg', 'id_742557.jpg', 'id_742569.jpg']

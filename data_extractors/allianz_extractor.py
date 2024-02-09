@@ -29,6 +29,7 @@ class AllianzExtractor:
         self.list = None
     
     def get_verification_code(self):
+        logger.info('[Downloader][ALLIANZ] Wait verification...')
         print('[Downloader][ALLIANZ] Wait verification...')
         # Connect to the email server
         mail = imaplib.IMAP4_SSL(self.codes.get("email", "imap"))
@@ -165,7 +166,7 @@ class AllianzExtractor:
         ret_car['images_count'] = 0
         ret_car['provider_name'] = 'allianz'
         ret_car['provider_id'] = car['a']
-        ret_car['brand_name'] = car['at'].split(' ')[0]
+        ret_car['brand_name'] = car['at'].strip().split(' ')[0]
         ret_car['production_date'] =  datetime.strptime(car['r'], "%m/%Y").strftime("%Y-%m-01")
         if 'km' in car:
             ret_car['run'] = car['km']
@@ -173,6 +174,7 @@ class AllianzExtractor:
             ret_car['run'] = 0
         car_json_path = os.path.join(self.data_path, '{}.json'.format(ret_car['provider_id']))
         if os.path.exists(car_json_path):
+            logger.info('[Downloader][ALLIANZ][%s] The auction was already downloaded' % ret_car['provider_id'])
             print('[Downloader][ALLIANZ][%s] The auction was already downloaded' % ret_car['provider_id'])
             return
         self.page.goto('https://www.allianz-carauction.ch/' + car['au'], timeout=10000)
@@ -206,9 +208,10 @@ class AllianzExtractor:
                 key = cells[0].text_content()
                 value = cells[1].text_content()
                 car_data[key] = value
-        ret_car['Sonderausstattung'] = self.page.locator("#special").text_content()
-        ret_car['Serienausstattung'] = self.page.locator("#serien").text_content()
+        car_data['Sonderausstattung'] = self.page.locator("#special").text_content()
+        car_data['Serienausstattung'] = self.page.locator("#serien").text_content()
         ret_car['data'] = car_data
+        logger.info('[Downloader][ALLIANZ][%s] New auction downloaded' % ret_car['provider_id'])
         print('[Downloader][ALLIANZ][%s] New auction downloaded' % ret_car['provider_id'])
         with open(car_json_path, 'w') as f:
             json.dump(ret_car, f)
@@ -245,6 +248,7 @@ class AllianzExtractor:
   
    
     def get_data(self):
+        logger.info('[Downloader][ALLIANZ] Start downloading...')
         print('[Downloader][ALLIANZ] Start downloading...')
         self.playwright = sync_playwright().start()
 
@@ -265,14 +269,17 @@ class AllianzExtractor:
         try:
             self.page.goto(MAIN_URL)
         except:
+            logger.info('[Downloader][ALLIANZ] Server connection failed...')
             print('[Downloader][ALLIANZ] Server connection failed...')
             self.context.close()
             self.browser.close()   
             return
         if not self._is_main_page():
+            logger.info('[Downloader][ALLIANZ] Sign in...')
             print('[Downloader][ALLIANZ] Sign in...')
             self._login()
         self.get_car_data()
+        logger.info('[Downloader][ALLIANZ] Finish downloading')
         print('[Downloader][ALLIANZ] Finish downloading')
         # self.page.wait_for_timeout(2000000)
         self.context.close()

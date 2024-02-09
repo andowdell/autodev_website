@@ -74,6 +74,7 @@ class AxaExtractor:
         
     def get_verification_code(self):
         print('[Downloader][AXA] Wait verification...')
+        logger.info('[Downloader][AXA] Wait verification...')
         mail = imaplib.IMAP4_SSL(self.codes.get("email", "imap"))
         mail.login(self.codes.get("email", "username"), self.codes.get("email", "pass"))
         mail.select("inbox")
@@ -84,7 +85,6 @@ class AxaExtractor:
         # time_threshold_str = time_threshold.strftime("%d-%b-%Y %H:%M:%S")
         time_threshold_str = time_threshold.strftime("%d-%b-%Y")
         found = False
-        # print(f'(SINCE "{time_threshold_str}")')
         while not found:
             self.page.wait_for_timeout(1000)
             # Search for emails sent after the specified time
@@ -173,7 +173,7 @@ class AxaExtractor:
         ret_car['images_count'] = 0
         ret_car['provider_name'] = 'axa'
         ret_car['provider_id'] = car['a']
-        ret_car['brand_name'] = car['at'].split(' ')[0]
+        ret_car['brand_name'] = car['at'].strip().split(' ')[0]
         ret_car['production_date'] =  datetime.strptime(car['r'], "%m/%Y").strftime("%Y-%m-01")
         if 'km' in car:
             ret_car['run'] = car['km']
@@ -182,6 +182,7 @@ class AxaExtractor:
         car_json_path = os.path.join(self.data_path, '{}.json'.format(ret_car['provider_id']))        
         if os.path.exists(car_json_path):
             print('[Downloader][AXA][%s] The auction was already downloaded' % ret_car['provider_id'])
+            logger.info('[Downloader][AXA][%s] The auction was already downloaded' % ret_car['provider_id'])
             return
         # self.page.goto('https://www.carauction.axa.ch/' + car['au'], timeout=10000)
         self.page.get_by_role('img', name=car['at']).click()
@@ -217,10 +218,11 @@ class AxaExtractor:
                 key = cells[0].text_content()
                 value = cells[1].text_content()
                 car_data[key] = value
-        ret_car['Sonderausstattung'] = self.page.locator("#special").text_content()
-        ret_car['Serienausstattung'] = self.page.locator("#serien").text_content()
+        car_data['Sonderausstattung'] = self.page.locator("#special").text_content()
+        car_data['Serienausstattung'] = self.page.locator("#serien").text_content()
         ret_car['data'] = car_data
-        print('[Downloader][AXA][%s] New auction downloaded' % ret_car['provider_id'])
+        logger.info('[Downloader][AXA][%s] New auction downloaded' % ret_car['provider_id'] )
+        print('[Downloader][AXA][%s] New auction downloaded' % ret_car['provider_id'] )
         with open(car_json_path, 'w') as f:
             json.dump(ret_car, f)
         self.page.get_by_role('img', name='AXA').click()
@@ -250,11 +252,12 @@ class AxaExtractor:
         match = re.search(pattern, request.url)
         if match:
             result = match.group(1)
-            with open(os.path.join(self.data_path, f'Id_{result}.jpg'), 'wb') as file:
+            with open(os.path.join(self.data_path, f'id_{result}.jpg'), 'wb') as file:
                 file.write(response.body())
         route.fulfill(response=response) 
             
     def get_data(self):
+        logger.info('[Downloader][AXA] Start downloading...')
         print('[Downloader][AXA] Start downloading...')
         self.playwright = sync_playwright().start()
         self.browser = self.playwright.chromium.launch(
@@ -274,15 +277,18 @@ class AxaExtractor:
         try:
             self.page.goto(MAIN_URL)
         except:
+            logger.error('[Downloader][AXA] Server connection failed...')
             print('[Downloader][AXA] Server connection failed...')
             self.context.close()
             self.browser.close()
             return
         if not self._is_main_page():
+            logger.info('[Downloader][AXA] Sign in...')
             print('[Downloader][AXA] Sign in...')
             self.page.goto(LOGIN_URL)
             self._login()
         self.get_car_data()
+        logger.info('[Downloader][AXA] Finish downloading')
         print('[Downloader][AXA] Finish downloading')
         # self.page.wait_for_timeout(2000000)
         self.context.close()

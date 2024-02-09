@@ -17,8 +17,8 @@ from data_extractors.axa_extractor import AxaExtractor
 from data_extractors.rest_extractor import RestExtractor
 from data_extractors.scc_extractor import SccExtractor
 
-
-# logger = DataLogger.get_logger(__name__)
+from data_logger.data_logger import DataLogger
+logger = DataLogger.get_logger(__name__)
 
 TEMP_NO_LOGO_PATH = '/web_apps/app_download/extracted/no_logo/'
 CONFIG_FILE = 'configs/config.ini'
@@ -68,12 +68,16 @@ class Application:
         self.auctions_api = urljoin(api_url, 'auctions/')
 
     def run(self):
+        logger.info('[Downloader] Started downloading updates...')
         print('[Downloader] Started downloading updates...')
         self.download_updates()
+        logger.info('[Downloader] Finished downloading updates...')
         print('[Downloader] Finished downloading updates...')
 
+        logger.info('[Downloader] Started uploading updates...')
         print('[Downloader] Started uploading updates...')
         self.upload_updates()
+        logger.info('[Downloader] Finished uploading updates...')
         print('[Downloader] Finished uploading updates...')
 
     def download_updates(self):
@@ -83,27 +87,27 @@ class Application:
         axa_task = threading.Thread(
             target=self.axa_extractor.get_data,
         )
-        # rest_task = threading.Thread(
-        #     target=self.rest_extractor.get_data,
-        # )
-        # scc_task = threading.Thread(
-        #     target=self.scc_extractor.get_data,
-        # )
+        rest_task = threading.Thread(
+            target=self.rest_extractor.get_data,
+        )
+        scc_task = threading.Thread(
+            target=self.scc_extractor.get_data,
+        )
 
         allianz_task.start()
-        # rest_task.start()
-        # scc_task.start()
+        rest_task.start()
+        scc_task.start()
         axa_task.start()
 
         allianz_task.join(600)
-        # rest_task.join(600)
-        # scc_task.join(600)
+        rest_task.join(600)
+        scc_task.join(600)
         axa_task.join(600)
 
          
     def upload_updates(self):
-        # insurance_dirs = ['rest', 'scc', 'allianz', 'axa']
-        insurance_dirs = ['allianz','axa']
+        insurance_dirs = ['rest', 'scc', 'allianz', 'axa']
+        # insurance_dirs = ['allianz','axa']
 
         for directory in insurance_dirs:
             path = os.path.join(DATA_DIR, directory)
@@ -169,6 +173,7 @@ class Application:
                 }
                 session.headers.update(headers)
                 print('[Downloader][%s][%s] Uploading auction' % (car['provider_name'], car['provider_id']))
+                logger.info('[Downloader][%s][%s] Uploading auction' % (car['provider_name'], car['provider_id']))
                 try:
                     response = session.post(
                         url=self.auctions_api,
@@ -179,8 +184,8 @@ class Application:
                         stream=True,
                     )
                     if response.status_code == 201:
-                        print('[Downloader][%s][%s] Uploaded auction successfully, HTTP code: %s' % (car['provider_name'], car['provider_id'], response.text))
-                        
+                        logger.info('[Downloader][%s][%s] Uploaded auction successfully.' % (car['provider_name'], car['provider_id']))
+                        print('[Downloader][%s][%s] Uploaded auction successfully.' % (car['provider_name'], car['provider_id']))
                         car['uploaded'] = True
                         with open(path_to_file, 'w') as f:
                             json.dump(car, f)
@@ -200,6 +205,7 @@ class Application:
                                 pass
                     else:
                         print('[Downloader][%s][%s] Uploading auction failed, error: %s' % (car['provider_name'], car['provider_id'], response.text))
+                        logger.error('[Downloader][%s][%s] Uploading auction failed, error: %s' % (car['provider_name'], car['provider_id'], response.text))
                         capture_message(response.text)
                 except Exception as e:
                     capture_exception(e)
