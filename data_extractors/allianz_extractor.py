@@ -198,6 +198,16 @@ class AllianzExtractor:
                 key = cells[0].text_content()
                 value = cells[1].text_content()
                 car_data[key] = value
+        self.page.locator('#description').wait_for()
+        rows = self.page.locator('#description').locator('tr')
+        for row in rows.all():
+            cells = row.locator('td').all()
+            if (len(cells) >= 2):
+                key = cells[0].text_content()
+                value = cells[1].text_content()
+                car_data[key] = value
+        ret_car['Sonderausstattung'] = self.page.locator("#special").text_content()
+        ret_car['Serienausstattung'] = self.page.locator("#serien").text_content()
         ret_car['data'] = car_data
         print('[Downloader][ALLIANZ][%s] New auction downloaded' % ret_car['provider_id'])
         with open(car_json_path, 'w') as f:

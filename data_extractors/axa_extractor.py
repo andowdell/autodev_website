@@ -194,8 +194,8 @@ class AxaExtractor:
             if image_id:
                 ret_car['images_count'] += 1
                 ret_car["images"].append(f'{image_id}.jpg')
-                if ret_car['images_count'] == 4:
-                    break
+            if ret_car['images_count'] == 4:
+                break
         if ret_car['end_date'] is None:
             auction_time = self.page.locator(".auction-time").text_content()
             ret_car['end_date'] = self._get_auction_enddate(auction_time).strftime("%Y-%m-%d %H:%M:%S")
@@ -209,7 +209,17 @@ class AxaExtractor:
                 key = cells[0].text_content()
                 value = cells[1].text_content()
                 car_data[key] = value
-        ret_car['data'] = car
+                self.page.locator('#description').wait_for()
+        rows = self.page.locator('#description').locator('tr')
+        for row in rows.all():
+            cells = row.locator('td').all()
+            if (len(cells) >= 2):
+                key = cells[0].text_content()
+                value = cells[1].text_content()
+                car_data[key] = value
+        ret_car['Sonderausstattung'] = self.page.locator("#special").text_content()
+        ret_car['Serienausstattung'] = self.page.locator("#serien").text_content()
+        ret_car['data'] = car_data
         print('[Downloader][AXA][%s] New auction downloaded' % ret_car['provider_id'])
         with open(car_json_path, 'w') as f:
             json.dump(ret_car, f)
