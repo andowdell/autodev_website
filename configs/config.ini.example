@@ -1,0 +1,6 @@
+[server]
+address=https://autazeszwajcarii.pl
+api_url=https://autazeszwajcarii.pl/api/v1/
+
+[client]
+id=TOKEN_GOES_HERE
