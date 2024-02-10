@@ -185,8 +185,8 @@ class AllianzExtractor:
             if image_id:
                 ret_car["images"].append(f'{image_id}.jpg')
                 ret_car['images_count'] += 1
-            if ret_car['images_count'] == 4:
-                break
+            # if ret_car['images_count'] == 4:
+            #     break
         if ret_car['end_date'] is None:
             auction_time = self.page.locator(".auction-time").text_content()
             ret_car['end_date'] = self._get_auction_enddate(auction_time).strftime("%Y-%m-%d %H:%M:%S")
@@ -250,37 +250,34 @@ class AllianzExtractor:
     def get_data(self):
         logger.info('[Downloader][ALLIANZ] Start downloading...')
         print('[Downloader][ALLIANZ] Start downloading...')
-        self.playwright = sync_playwright().start()
-
-        self.browser = self.playwright.chromium.launch(
-            headless=True,
-            proxy={
-            "server": "zproxy.lum-superproxy.io:22225",
-            "username": "lum-customer-hl_9827956f-zone-data_center-country-ch",
-            "password": "xr3grz5w0cr8"
-            }
-        )
-        self.context = self.browser.new_context()
-        self.context.route("**/*.{png,jpg,jpeg}", lambda route: route.abort())
-        self.context.route("https://www.allianz-carauction.ch/javax.faces.resource/dynamiccontent.properties.html?*", self.download)
-        self.context.route("https://www.allianz-carauction.ch/auction/list/DE", self.handle)
-        self._load_cookies()
-        self.page = self.context.new_page()
         try:
+            self.playwright = sync_playwright().start()
+            self.browser = self.playwright.chromium.launch(
+                headless=True,
+                proxy= {
+                "server": self.codes.get("proxy", "server"),
+                "username": self.codes.get("proxy", "username"),
+                "password": self.codes.get("proxy", "password")
+                }
+            )
+            self.context = self.browser.new_context()
+            self.context.route("**/*.{png,jpg,jpeg}", lambda route: route.abort())
+            self.context.route("https://www.allianz-carauction.ch/javax.faces.resource/dynamiccontent.properties.html?*", self.download)
+            self.context.route("https://www.allianz-carauction.ch/auction/list/DE", self.handle)
+            self._load_cookies()
+            self.page = self.context.new_page()
             self.page.goto(MAIN_URL)
-        except:
-            logger.info('[Downloader][ALLIANZ] Server connection failed...')
-            print('[Downloader][ALLIANZ] Server connection failed...')
-            self.context.close()
-            self.browser.close()   
+            if not self._is_main_page():
+                logger.info('[Downloader][ALLIANZ] Sign in...')
+                print('[Downloader][ALLIANZ] Sign in...')
+                self._login()
+            self.get_car_data()
+            logger.info('[Downloader][ALLIANZ] Finish downloading')
+            print('[Downloader][ALLIANZ] Finish downloading')
+        except Exception as e:
+            logger.error('[Downloader][AXA] Downloading failed due to ', e)
+            print('[Downloader][AXA] Downloading failed due to ', e)
             return
-        if not self._is_main_page():
-            logger.info('[Downloader][ALLIANZ] Sign in...')
-            print('[Downloader][ALLIANZ] Sign in...')
-            self._login()
-        self.get_car_data()
-        logger.info('[Downloader][ALLIANZ] Finish downloading')
-        print('[Downloader][ALLIANZ] Finish downloading')
         # self.page.wait_for_timeout(2000000)
         self.context.close()
         self.browser.close()        

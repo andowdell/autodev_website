@@ -6,3 +6,7 @@ username=allianz@medserver.pl
 pass=86,},vesOnE
 smtp=mail.medserver.pl
 imap=mail.medserver.pl
+[proxy]
+server=zproxy.lum-superproxy.io:22225,
+username=lum-customer-hl_9827956f-zone-data_center-country-ch,
+password=xr3grz5w0cr8
