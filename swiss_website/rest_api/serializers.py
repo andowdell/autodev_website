@@ -141,9 +141,10 @@ class AuctionSerializer(serializers.Serializer):
                 return -1
             elif a.name > b.name:
                 return 1
+
         if len(images) == 0:
             first_photo = None
-            auction, cr = Auction.objects.get_or_create(brand=brand, **validated_data)
+            instance.min_image=None
         else:
             images = sorted(list(images), key=cmp_to_key(img_name_cmp))
             first_photo = images[0]
@@ -157,19 +158,17 @@ class AuctionSerializer(serializers.Serializer):
                 filename = slugify(auction_id)+'.png'
                 result_path = os.path.join('/web_apps/swiss_website/auction_photos/', filename)
                 result.save(result_path)
-
-                with open(result_path, 'rb') as f:
-                    wrapped_file = File(f)
-                    instance.min_image=wrapped_file
+                old_path = instance.min_image.path
+                instance.min_image.save(os.path.basename(result_path), File(open(result_path ,"wb")), save=True)
                 os.remove(result_path)
+                os.remove(old_path)
             except Exception as e:
-                log_exception(e)
-                wrapped_file = first_photo
-                instance.min_image=wrapped_file
-        models_to_delete = AuctionPhoto.objects.filter(auction=auction)
+                instance.min_image=None
+        
+        models_to_delete = AuctionPhoto.objects.filter(auction=instance)
         models_to_delete.delete()
         for img in images:
-            AuctionPhoto.objects.create(image=img, auction=auction)
+            AuctionPhoto.objects.create(image=img, auction=instance)
         instance.save()
         return instance
 

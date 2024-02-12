@@ -107,7 +107,7 @@ class Application:
          
     def upload_updates(self):
         insurance_dirs = ['rest', 'scc', 'allianz', 'axa']
-        # insurance_dirs = ['allianz','axa']
+        # insurance_dirs = ['rest']
 
         for directory in insurance_dirs:
             path = os.path.join(DATA_DIR, directory)

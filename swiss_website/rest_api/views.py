@@ -584,6 +584,9 @@ class AuctionList(GenericAPIView):
             serializer = AuctionSerializer(auction, data=data)
         except Auction.DoesNotExist:
             serializer = AuctionSerializer(data=data)
+        except Exception as e:
+            return Response(str(e), status=status.status.HTTP_400_BAD_REQUEST)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

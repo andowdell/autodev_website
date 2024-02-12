@@ -114,7 +114,7 @@ class Auction(models.Model):
 
     def get_provider_link(self):
         if self.provider_name == 'axa':
-            ident = str(self.first_photo()).split('_')[1].split('/')[1]
+            ident = url_encoded = quote(self.provider_id)
             link = 'https://carauction.axa.ch/auction/car/auctiondetails.html?article={}&ref=start'.format(ident)
             try:
                 if self.data['moto'] == True:

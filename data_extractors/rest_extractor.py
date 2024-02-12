@@ -57,13 +57,19 @@ class RestExtractor():
         '''
         Returns json list of objects
         '''
+        logger.info('[Downloader][REST] Start downloading...')
+        print('[Downloader][REST] Start downloading...')
         try:
+            logger.info('[Downloader][REST] Sign in...')
+            print('[Downloader][REST] Sign in...')
             self._login()
             self.get_all_cars()
 
             self._login_vaudoise()
             self.get_all_cars(subproviders=['Vaudoise Assurances'])
-
+            
+            logger.info('[Downloader][REST] Finish downloading...')
+            print('[Downloader][REST] Finish downloading...')
             FINAL_LOGS["success"] = True
             save_final_logs()
         except Exception as e:
@@ -97,7 +103,6 @@ class RestExtractor():
             response = self.get_request(OFFERS_URL.format(page))
             soup_cars = BeautifulSoup(response.text, 'html.parser')
             car_entries = soup_cars.find('tbody').find_all('tr')
-
             if len(car_entries) == 0:
                 break
 
@@ -244,7 +249,7 @@ class RestExtractor():
 
         for image in images:
             url = image['href']
-            img_data = self.get_request(REST_MAIN.format(url), stream=True)
+            img_data = self.session.get(REST_MAIN.format(url), stream=True)
             img_data.raw.decode_content = True
 
             url = url.replace('/', '_')
