@@ -114,19 +114,27 @@ class Application:
             auctions_filenames = [
                 each for each in os.listdir(path) if each.endswith('.json')
             ]
-
             for auction_filename in auctions_filenames:
                 path_to_file = os.path.join(path, auction_filename)
 
                 with open(path_to_file, 'r') as f:
                     car = json.load(f)
-                
                 if car.get('uploaded', False):
                     continue
-
                 images = car.pop('images', None)
                 if images is None:
                     continue
+                # check all images loaded
+                if car['provider_name'] == 'axa' or car['provider_name'] == 'allianz':
+                    miss_loaded_count = 0
+                    for img_filename in images:
+                        img_path = os.path.join(path, img_filename)
+                        if not os.path.exists(img_path):
+                            miss_loaded_count += 1
+                    if miss_loaded_count > 0:
+                        print('[Downloader][%s][%s] Uploading skip with [%d] missing images' % (car['provider_name'], car['provider_id'], miss_loaded_count))
+                        os.remove(path_to_file)
+                        continue
 
                 photos = list()
                 for img_filename in images:
@@ -172,8 +180,6 @@ class Application:
                     'Authorization': 'Token %s' % token
                 }
                 session.headers.update(headers)
-                print('[Downloader][%s][%s] Uploading auction' % (car['provider_name'], car['provider_id']))
-                logger.info('[Downloader][%s][%s] Uploading auction' % (car['provider_name'], car['provider_id']))
                 try:
                     response = session.post(
                         url=self.auctions_api,

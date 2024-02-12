@@ -184,10 +184,10 @@ class AxaExtractor:
             print('[Downloader][AXA][%s] The auction was already downloaded' % ret_car['provider_id'])
             logger.info('[Downloader][AXA][%s] The auction was already downloaded' % ret_car['provider_id'])
             return
-        # self.page.goto('https://www.carauction.axa.ch/' + car['au'], timeout=10000)
+        #self.page.goto('https://www.carauction.axa.ch/' + car['au'], timeout=10000)
         self.page.get_by_role('img', name=car['at']).click()
         ret_car['images'] = list()
-        self.page.wait_for_load_state('load')
+        self.page.wait_for_load_state('networkidle')
         self.page.wait_for_selector('#slider')
 
         for image_element in self.page.locator("#slider").get_by_role("listitem").all():

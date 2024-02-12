@@ -178,6 +178,7 @@ class AllianzExtractor:
             print('[Downloader][ALLIANZ][%s] The auction was already downloaded' % ret_car['provider_id'])
             return
         self.page.goto('https://www.allianz-carauction.ch/' + car['au'], timeout=10000)
+        self.page.wait_for_load_state('load')
         ret_car['images'] = list()
         self.page.locator('#slider').wait_for()
         for image_element in self.page.locator("#slider").get_by_role("listitem").all():
