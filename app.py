@@ -120,7 +120,7 @@ class Application:
                 with open(path_to_file, 'r') as f:
                     car = json.load(f)
                 if car.get('uploaded', False):
-                    continue
+                    continue    
                 images = car.pop('images', None)
                 if images is None:
                     continue

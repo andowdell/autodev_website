@@ -581,22 +581,12 @@ class AuctionList(GenericAPIView):
 
         try:
             auction = Auction.objects.get(provider_id=data['provider_id'], provider_name=data['provider_name'])
-            if auction.end_date.strftime("%Y-%m-%d %H:%M:%S") != data['end_date']:
-               auction.end_date = data['end_date']
-                # auction.title = '%s %s' % (auction.title, ' - nowe zakończenie')
-            auction.save()
-            # auction.delete()
+            serializer = AuctionSerializer(auction, data=data)
         except Auction.DoesNotExist:
-            pass
-        else:
-           return Response(status=status.HTTP_201_CREATED) 
-
-        serializer = AuctionSerializer(data=data)
-
+            serializer = AuctionSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

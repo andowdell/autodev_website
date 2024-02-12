@@ -46,7 +46,6 @@ class RestExtractor():
         self.codes.read(codes_file)
         self.session = requests.Session()
         data_path = os.path.join(dir_path, TARGET_DIR)
-
         try:
             os.mkdir(data_path)
         except FileExistsError:
@@ -73,13 +72,29 @@ class RestExtractor():
             save_final_logs()
             raise e
 
+    def get_request(self, url):
+        response = self.session.get(url)
+        if response.status_code == 305:
+            proxy_url = response.headers['Location']
+            original_proxies = self.session.proxies.copy()
+            self.session.proxies = {'http': proxy_url, 'https': proxy_url}
+            redirected_response = self.session.get(url)
+            self.session.proxies = original_proxies
+            return redirected_response
+        elif response.status_code == 303:
+           redirected_url = response.headers['Location']
+           redirected_response = requests.get(redirected_url)
+           return redirected_response
+        else:
+            return response
+        
     def get_all_cars(self, subproviders=None):
         ''' Returns list of all url cars '''
 
         page = 1
 
         while True:
-            response = self.session.get(OFFERS_URL.format(page))
+            response = self.get_request(OFFERS_URL.format(page))
             soup_cars = BeautifulSoup(response.text, 'html.parser')
             car_entries = soup_cars.find('tbody').find_all('tr')
 
@@ -124,7 +139,7 @@ class RestExtractor():
 
         car = dict()
 
-        response = self.session.get(REST_MAIN.format(car_url))
+        response = self.get_request(REST_MAIN.format(car_url))
         soup_car = BeautifulSoup(response.text, 'html.parser')
 
         title = soup_car.h1.text.strip().split('\t')
@@ -184,14 +199,16 @@ class RestExtractor():
                 prev_car_data['end_date'] = ret_car['end_date']
                 with open(car_json_path, 'w') as f:
                     json.dump(prev_car_data, f)
+                print('[Downloader][REST][%s] Updated auction end date' % ret_car['provider_id'])
                 logger.info('[Downloader][REST][%s] Updated auction end date' % ret_car['provider_id'])
 
+            print('[Downloader][REST][%s] The auction was already downloaded - cancelling...' % ret_car['provider_id'])
             logger.info('[Downloader][REST][%s] The auction was already downloaded - cancelling...' % ret_car['provider_id'])
             return
 
         self.set_car_images(car, response.text)
+        print('[Downloader][REST][%s] New auction downloaded' % ret_car['provider_id'])
         logger.info('[Downloader][REST][%s] New auction downloaded' % ret_car['provider_id'])
-
         if car['Marke'] is None:
             car['Marke'] = 'N/A'
         if car['Typ'] is None:
@@ -227,7 +244,7 @@ class RestExtractor():
 
         for image in images:
             url = image['href']
-            img_data = self.session.get(REST_MAIN.format(url), stream=True)
+            img_data = self.get_request(REST_MAIN.format(url), stream=True)
             img_data.raw.decode_content = True
 
             url = url.replace('/', '_')
@@ -279,5 +296,5 @@ class RestExtractor():
             raise Exception("Login Failed")
 
 if __name__ == '__main__':
-    ext = RestExtractor('../extracted', '../codes/rest.codes')
+    ext = RestExtractor('./extracted', './codes/rest.codes')
     ext.get_data()
