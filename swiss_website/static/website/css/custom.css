@@ -1,0 +1,16 @@
+@-webkit-keyframes blinker {
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
+
+.blinkbanner {
+    -webkit-animation: blinker 1s 5;
+    -moz-animation: blinker 1s 5;
+    animation: blinker 1s 5;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 32px;
+    color: #B12120;
+}
