@@ -117,18 +117,10 @@ class AuctionSerializer(serializers.Serializer):
         """
         Update and return an existing `Auction` instance, given the validated data.
         """
-        instance.title = validated_data.get('title', instance.title)
         instance.start_date = validated_data.get('start_date', instance.start_date)
         instance.end_date = validated_data.get('end_date', instance.end_date)
         instance.data = validated_data.get('data', instance.data)
         instance.images_count = validated_data.get('images_count', instance.images_count)
-        instance.provider_name = validated_data.get('provider_name', instance.provider_name)
-        #instance.subprovider_name = validated_data.get('subprovider_name', instance.subprovider_name)
-        instance.provider_id = validated_data.get('provider_id', instance.provider_id)
-
-        brand = validated_data.get('brand', instance.brand.name)
-        brand, cr = Brand.objects.get_or_create(name=brand['name'])
-        instance.brand = brand
 
         images = validated_data.pop('photos_list')
         def img_name_cmp(a, b):
@@ -154,14 +146,12 @@ class AuctionSerializer(serializers.Serializer):
                 w_scale = image.size[0] / max_width
                 height = image.size[1] / w_scale
                 result = image.resize((int(max_width), int(height)), Image.ANTIALIAS)
-                auction_id = validated_data.get('provider_id', '') + brand.name
+                auction_id = validated_data.get('provider_id', '') + instance.brand.name
                 filename = slugify(auction_id)+'.png'
                 result_path = os.path.join('/web_apps/swiss_website/auction_photos/', filename)
                 result.save(result_path)
-                old_path = instance.min_image.path
-                instance.min_image.save(os.path.basename(result_path), File(open(result_path ,"wb")), save=True)
-                os.remove(result_path)
-                os.remove(old_path)
+                instance.min_image = result_path
+                # os.remove(result_path)
             except Exception as e:
                 instance.min_image=None
         
