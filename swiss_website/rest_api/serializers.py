@@ -70,22 +70,22 @@ class AuctionSerializer(serializers.Serializer):
         brand, cr = Brand.objects.get_or_create(name=brand['name'])
         images = validated_data.pop('photos_list')
 
-        def img_name_cmp(a, b):
-            if len(a.name) < len(b.name):
-                return -1
-            elif len(a.name) > len(b.name):
-                return 1
+        # def img_name_cmp(a, b):
+        #     if len(a.name) < len(b.name):
+        #         return -1
+        #     elif len(a.name) > len(b.name):
+        #         return 1
 
-            if a.name < b.name:
-                return -1
-            elif a.name > b.name:
-                return 1
+        #     if a.name < b.name:
+        #         return -1
+        #     elif a.name > b.name:
+        #         return 1
 
         if len(images) == 0:
             first_photo = None
             auction, cr = Auction.objects.get_or_create(brand=brand, **validated_data)
         else:
-            images = sorted(list(images), key=cmp_to_key(img_name_cmp))
+            # images = sorted(list(images), key=cmp_to_key(img_name_cmp))
             first_photo = images[0]
 
             try:
@@ -123,22 +123,22 @@ class AuctionSerializer(serializers.Serializer):
         instance.images_count = validated_data.get('images_count', instance.images_count)
 
         images = validated_data.pop('photos_list')
-        def img_name_cmp(a, b):
-            if len(a.name) < len(b.name):
-                return -1
-            elif len(a.name) > len(b.name):
-                return 1
+        # def img_name_cmp(a, b):
+        #     if len(a.name) < len(b.name):
+        #         return -1
+        #     elif len(a.name) > len(b.name):
+        #         return 1
 
-            if a.name < b.name:
-                return -1
-            elif a.name > b.name:
-                return 1
+        #     if a.name < b.name:
+        #         return -1
+        #     elif a.name > b.name:
+        #         return 1
 
         if len(images) == 0:
             first_photo = None
             instance.min_image=None
         else:
-            images = sorted(list(images), key=cmp_to_key(img_name_cmp))
+            # images = sorted(list(images), key=cmp_to_key(img_name_cmp))
             first_photo = images[0]
             try:
                 image = Image.open(first_photo)
