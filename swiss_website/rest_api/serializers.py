@@ -95,9 +95,10 @@ class AuctionSerializer(serializers.Serializer):
                 height = image.size[1] / w_scale
                 result = image.resize((int(max_width), int(height)), Image.ANTIALIAS)
                 auction_id = validated_data.get('provider_id', '') + brand.name
-                filename = slugify(auction_id)+'.png'
+                #filename = slugify(auction_id)+'.png'
+                filename = slugify(auction_id)+'.jpg'
                 result_path = os.path.join('/web_apps/swiss_website/auction_photos/', filename)
-                result.save(result_path)
+                result.save(result_path, format='JPEG')
 
                 with open(result_path, 'rb') as f:
                     wrapped_file = File(f)
@@ -147,9 +148,10 @@ class AuctionSerializer(serializers.Serializer):
                 height = image.size[1] / w_scale
                 result = image.resize((int(max_width), int(height)), Image.ANTIALIAS)
                 auction_id = validated_data.get('provider_id', '') + instance.brand.name
-                filename = slugify(auction_id)+'.png'
+                # filename = slugify(auction_id)+'.png'
+                filename = slugify(auction_id)+'.jpg'
                 result_path = os.path.join('/web_apps/swiss_website/auction_photos/', filename)
-                result.save(result_path)
+                result.save(result_path, format='JPEG')
                 instance.min_image = result_path
                 # os.remove(result_path)
             except Exception as e:

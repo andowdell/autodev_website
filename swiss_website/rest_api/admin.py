@@ -225,14 +225,14 @@ class ColorAuctionListFilter(admin.SimpleListFilter):
     parameter_name = 'color'
 
     def lookups(self, request, model_admin):
-       return (
-           ('0', _('Biały')),
-           ('1', _('Zielony')),
-           ('2', _('Niebieski')),
-           ('3', _('Pomarańczowy')),
-           ('4', _('Czerwony')),
-           ('5', _('Złoty')),
-       )
+        return (
+            ('0', _('Biały')),
+            ('1', _('Zielony')),
+            ('2', _('Niebieski')),
+            ('3', _('Pomarańczowy')),
+            ('4', _('Czerwony')),
+            ('5', _('Złoty')),
+        )
 
     def queryset(self, request, queryset):
         if self.value() is None:
@@ -254,7 +254,8 @@ def dynamic_schema(widget):
     return {
         "type": "object",
     }
-        
+
+
 
 class AuctionAdmin(admin.ModelAdmin):
     list_display = ('title', 'ref_id', 'published', 'highlighted', 'first_photo_img', 'provider_name', 'brand', 'to_end_date', 'get_bets')
@@ -269,7 +270,6 @@ class AuctionAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         queryset = super(AuctionAdmin, self).get_queryset(request)
-        
         if request.GET.get('is_active', 'yes') == 'no':
             queryset = queryset.filter(
                 end_date__gte=timezone.now()
@@ -285,6 +285,36 @@ class AuctionAdmin(admin.ModelAdmin):
         form = super().get_form(request, obj, widgets={'data': widget}, **kwargs)
         return form
 
+
+class ColorBetListFilter(admin.SimpleListFilter):
+    title = _('Kolor')
+    parameter_name = 'color'
+
+    def lookups(self, request, model_admin):
+        if request.user.groups.filter(name='RestrictedGroup').exists():
+                 return (
+                ('1', _('Zielony')),
+                ('2', _('Niebieski')),
+            )
+        else:
+            return (
+                ('0', _('Biały')),
+                ('1', _('Zielony')),
+                ('2', _('Niebieski')),
+                ('3', _('Pomarańczowy')),
+                ('4', _('Czerwony')),
+                ('5', _('Złoty')),
+            )
+
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            if request.user.groups.filter(name='RestrictedGroup').exists():
+                return queryset.filter(color__in=[1, 2])
+            else:
+                return queryset
+        color = int(self.value())
+        ret_queryset = queryset.filter(color=color)
+        return ret_queryset
 
 class BetActiveFilter(admin.SimpleListFilter):
     title = _('Aktywne')
@@ -324,10 +354,10 @@ class BetActiveFilter(admin.SimpleListFilter):
 
 class BetAdmin(admin.ModelAdmin):
     raw_id_fields = ('auction', 'user')
-    list_display = ('auction', 'field_auction_link', 'field_user_registered', 'price', 'note_admin', 'field_is_bet_automate', 'auction_to_end', 'color',)
+    # list_display = ('auction', 'field_auction_link', 'field_user_registered', 'price', 'note_admin', 'field_is_bet_automate', 'auction_to_end', 'color',)
     list_editable = ('color', )
     search_fields = ('auction__ref_id', 'user__email', 'auction__title', 'user__id',)
-    list_filter = ('color', BetActiveFilter, )
+    list_filter = (ColorAuctionListFilter, BetActiveFilter, )
     list_per_page = 150
     list_select_related = ('auction', 'user')
 
@@ -335,6 +365,33 @@ class BetAdmin(admin.ModelAdmin):
         models.CharField: {'widget': TextInput(attrs={'size':'20'})},
         models.TextField: {'widget': Textarea(attrs={'rows':2, 'cols':40})},
     }
+    def get_list_display(delf, request):
+        if request.user.groups.filter(name='RestrictedGroup').exists():
+            return ('auction', 'field_auction_link', 'field_user_registered_restricted', 'price', 'note_admin', 'field_is_bet_automate', 'auction_to_end', 'color',)
+        else:
+            return ('auction', 'field_auction_link', 'field_user_registered', 'price', 'note_admin', 'field_is_bet_automate', 'auction_to_end', 'color',)
+        
+    def field_user_registered_restricted(self, obj):
+        user = None
+        user_bets = ''
+        try:
+            user = UserPrivate.objects.get(user=obj.user)
+            user_bets = '<a href="/admin/rest_api/bet/?q=%s" style="color:#ac0303;float:right;display:inline-block">licytacje</a>' % obj.user.email
+            user = '<span style="display:inline-block;float:left;">%s %s</span> ' % (user.first_name, user.last_name)
+            user += user_bets
+            return user
+        except UserPrivate.DoesNotExist as e:
+            log_exception(e)
+
+        try:
+            user = '<span >%s %s</span> ' % (user.first_name, user.last_name)
+        except:
+            user = str(obj.user.username)
+        user += user_bets
+
+        return user
+    field_user_registered_restricted.short_description = 'Użytkownik'
+    field_user_registered_restricted.allow_tags = True
 
     def field_user_registered(self, obj):
         user = None

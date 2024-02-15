@@ -38,8 +38,9 @@ class Command(BaseCommand):
             height = image.size[1] / w_scale
             result = image.resize((int(max_width), int(height)), Image.ANTIALIAS)
             auction_id = auction.provider_id + auction.brand.name
-            result_path = os.path.join('/web_apps/swiss_website/auction_photos/', str(auction_id)+'.png')
-            result.save(result_path)
+            #result_path = os.path.join('/web_apps/swiss_website/auction_photos/', str(auction_id)+'.png')
+            result_path = os.path.join('/web_apps/swiss_website/auction_photos/', str(auction_id)+'.jpg')
+            result.save(result_path, format='JPEG')
 
             with open(result_path, 'rb') as f:
                 auction.min_image = File(f)

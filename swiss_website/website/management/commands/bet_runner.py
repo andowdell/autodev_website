@@ -124,11 +124,11 @@ class Command(BaseCommand):
 
         while True:
             now = datetime.now()
+            # find scheduled bets which auction end date is not reached and schedules flag is false
             bets_scheduled = ScheduledBet.objects.filter(bet__auction__end_date__gt=now, scheduled=False)
             scheduled_recently = [s for s in scheduled_recently if s['time'] + timedelta(seconds=SCHEDULED_BUSY_SECS) > now]
             for bet_scheduled in bets_scheduled:
                 auction = bet_scheduled.bet.auction
-
                 if any(s['pk'] == bet_scheduled.pk for s in scheduled_recently):
                     logger.info('[Bet][%s][%s] Worker waits - betting scheduled recently' % (auction.provider_name.upper(), auction.provider_id))
                     continue
@@ -143,6 +143,6 @@ class Command(BaseCommand):
 
             time.sleep(INTERVAL)
 
-
+    # get the time 30 seconds before target_date
     def date_offset(self, target_date):
         return target_date - timedelta(seconds=WORKER_START)
