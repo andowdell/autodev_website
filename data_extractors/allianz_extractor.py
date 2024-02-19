@@ -4,6 +4,7 @@ import json
 import imaplib
 import requests
 import email
+import time
 from configparser import ConfigParser
 from datetime import datetime, timedelta
 from playwright.sync_api import expect, sync_playwright
@@ -105,29 +106,39 @@ class AllianzExtractor:
         password = self.codes.get('account', 'password')
         self.page.get_by_placeholder('Benutzername').fill(login)
         self.page.get_by_placeholder('Passwort').fill(password)
-        self.page.get_by_role("button", name="Einloggen").click()  
-        
-        try:
-            self.page.locator("input[name=\"mfaForm\\:mfaCode\"]").click()
-        except:
-            
+        self.page.get_by_role("button", name="Einloggen").click() 
+        if self._is_main_page():
             self._save_cookies()
-            return
-        verification_code = self.get_verification_code()
-        self.page.locator("input[name=\"mfaForm\\:mfaCode\"]").fill(verification_code)
-        self.page.get_by_role("button", name="Senden").click()
-        self._is_main_page()
-        self._save_cookies()
+            return True
+        elif self._is_verification_page():
+            try:
+                self.page.locator("input[name=\"mfaForm\\:mfaCode\"]").click()
+                verification_code = self.get_verification_code()
+                self.page.locator("input[name=\"mfaForm\\:mfaCode\"]").fill(verification_code)
+                self.page.get_by_role("button", name="Senden").click()
+                self._save_cookies()
+                return True
+            except:
+                self._save_cookies()
+                return False
+        else:
+            return False
 
     def get_car_data(self):
+        start_time = time.time()
+
         while self.list is None:
-            self.page.wait_for_timeout(100)
+            self.page.wait_for_timeout(1000)
+            if time.time() - start_time >= 60:
+                print('[Downloader][ALLIANZ] The main Page is not responding...')
+                logger.info('[Downloader][ALLIANZ] The main Page is not responding...')
+                break
         for car in self.list:
             try:
                 self.get_car_detail(car)       
             except Exception:
                 self.get_car_detail(car)
-                
+
     def download_image(self, url, save_path):
         try:
             response = requests.get(url, headers={'Accept':'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8'})
@@ -224,6 +235,14 @@ class AllianzExtractor:
         except:
             return False
 
+    def _is_verification_page(self):
+        try:
+            expect(self.page.locator("#mfaDialog")).to_be_visible(timeout=1000)
+            return True
+        except:
+            return False
+
+
     def handle(self, route):
         response = route.fetch()
         # response.raise_for_status()
@@ -271,13 +290,16 @@ class AllianzExtractor:
             if not self._is_main_page():
                 logger.info('[Downloader][ALLIANZ] Sign in...')
                 print('[Downloader][ALLIANZ] Sign in...')
-                self._login()
+                if not self._login():
+                    print('[Downloader][ALIANZ] Failed due to signing in... : AXA Server Error')
+                    logger.info('[Downloader][ALIANZ] Failed due to signing in... : AXA Server Error')
+                    return
             self.get_car_data()
             logger.info('[Downloader][ALLIANZ] Finish downloading')
             print('[Downloader][ALLIANZ] Finish downloading')
         except Exception as e:
-            logger.error('[Downloader][AXA] Downloading failed due to ', e)
-            print('[Downloader][AXA] Downloading failed due to ', e)
+            logger.error('[Downloader][ALIANZ] Downloading failed due to ', e)
+            print('[Downloader][ALIANZ] Downloading failed due to ', e)
             return
         # self.page.wait_for_timeout(2000000)
         self.context.close()
