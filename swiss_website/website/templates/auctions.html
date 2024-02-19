@@ -22,7 +22,6 @@
   <div class="container">
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-8 auctions-top-box" style="float:right;">
-            <!--- <div class="auctions-top" style="background:url('{{banner.min_image.url|slice:"15:"}}') no-repeat center "></div> --->
 	    <div id="dvImage" class="auctions-top" style="no-repeat center background-size:cover"></div>
           <div class="info-more-rules pull-right" style="margin-top:-20px"></div>
         </div>
@@ -108,7 +107,6 @@
                           <div class="auction-entry-info">
                   <h4><a href="{{ auction.link }}">{{ auction.title|slice:":55" }}</a></h4>
                               <p>
-                              <span>{{ main12 }}:</span> <b>{{ auction.min_image.url }}</b><br/>
                               <span>{{ main12 }}:</span> <b>{{ auction.production_date }}</b><br/>
                               <span>{{ main13 }}:</span> <b>{{ auction.run }} km</b>  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span>{{ main16 }}:</span> <b>{{ auction.ref_id }}</b> </b> <br/>
                               </p>
