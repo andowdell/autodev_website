@@ -69,6 +69,98 @@ class ShortUrlModel(models.Model):
     def __str__(self):
         return self.title
 
+class MarketingCampaign(models.Model):
+    name = models.CharField(max_length=63, verbose_name='Nazwa kampani')
+    cookie_value = models.CharField(max_length=63, verbose_name='Wartość Cookiesa')
+    url_string = models.CharField(max_length=63, verbose_name='Fragment referencyjnego URL lub Referer')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Kampania Marketingowa'
+        verbose_name_plural = 'Kampanie Marketingowe'
+
+class UserPrivate(models.Model):
+    def has_add_permission(self, request):
+        return False
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Użytkownik',
+        editable=False,
+    )
+
+    user_top = models.ForeignKey(
+        'self',
+        on_delete=models.SET_NULL,
+        verbose_name='Zarządca',
+        blank=True,
+        null=True,
+    )
+
+    campaign_source = models.ForeignKey(
+        MarketingCampaign,
+        on_delete=models.SET_NULL,
+        verbose_name='Kampania źródłowa',
+        blank=True,
+        null=True,
+    )
+
+    # more data about user here
+    accepted = models.BooleanField(default=False, verbose_name='Zaakceptowano')
+    first_name = models.CharField(max_length=31, blank=True, null=True, verbose_name='Imię')
+    second_name = models.CharField(max_length=31, blank=True, null=True, verbose_name='Drugie imię')
+    last_name = models.CharField(max_length=63, blank=True, null=True, verbose_name='Nazwisko')
+    phone_number = models.CharField(max_length=31, blank=True, null=True, verbose_name='Telefon')
+    slug = models.CharField(max_length=31, blank=True, null=True, verbose_name='slug')
+    note = models.TextField(null=True, blank=True, verbose_name='Notka', max_length=255)
+    lang = models.CharField(max_length=3, default='pl', verbose_name='Język', choices=(
+            ('pl', 'Polski'),
+            ('en', 'Angielski'),
+            ('ru', 'Rosyjski'),
+            ('de', 'Niemiecki'),
+        )
+    )
+    token = models.CharField(max_length=127, blank=True, null=True, verbose_name='Reset token')
+    token_end_of_validity = models.DateTimeField(null=True, blank=True, verbose_name='Ważność tokena')
+    country = models.CharField(max_length=63, blank=True, null=True, verbose_name='Kraj')
+    postal_code = models.CharField(max_length=31, blank=True, null=True, verbose_name='Kod poczt.')
+    city_name = models.CharField(max_length=31, blank=True, null=True, verbose_name='Miasto')
+    street_name = models.CharField(max_length=127, blank=True, null=True, verbose_name='Ulica')
+    home_number = models.CharField(max_length=63, blank=True, null=True, verbose_name='Dom/Mieszkanie')
+    promocode = models.CharField(max_length=63, blank=True, null=True, verbose_name='Kod promo')
+    lookup = models.CharField(max_length=255)
+    calculator_enabled = models.BooleanField(default=True, verbose_name='Dostępny kalkulator')
+    registered_at = models.DateTimeField(verbose_name='Data rejestracji')
+
+    def bets(self):
+        return '<a href="/admin/rest_api/bet/?q=%s" style="color:#ac0303">%s</a>' % (self.user.email, 'Licytacje')
+    bets.allow_tags = True
+    bets.short_description='Licytacje'
+
+    def email(self):
+        return self.user.email
+    email.shortdescription = 'Email'
+
+    def __str__(self):
+        return "{} {} ({})".format(
+            self.first_name,
+            self.last_name,
+            self.user.email
+        )
+    
+    def save(self, *args, **kwargs):
+        self.lookup = self.__str__()
+        if not self.id:
+            self.registered_at = timezone.now()
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'Uzytkownik'
+        verbose_name_plural = 'Uzytkownicy'
+
 
 class Banner(models.Model):
     title = models.CharField(max_length=127, blank=False, null=False, verbose_name='Nazwa')
@@ -357,6 +449,12 @@ class Bet(models.Model):
         verbose_name='Użytkownik',
         #editable=True,
     )
+    user_priv = models.ForeignKey(
+        UserPrivate,
+        on_delete=models.CASCADE,
+        verbose_name='Użytkownik1',
+        null=True
+    )
     color = models.IntegerField(verbose_name='Kolor', default=0, choices=(
         (0, 'Biały'),
         (1, 'Zielony'),
@@ -461,6 +559,7 @@ class Bet(models.Model):
         verbose_name = 'Licytacja'
         verbose_name_plural = 'Licytacje'
         indexes = [
+            models.Index(fields=['auction_id', "-price"]),
             models.Index(fields=['-date']),
             models.Index(fields=['user', '-price']),
             models.Index(fields=['user']),
@@ -553,100 +652,6 @@ class BetSupervisor(Bet):
         proxy = True
         verbose_name = 'Licytacja'
         verbose_name_plural = 'Licytacje Podopiecznych'
-
-
-class MarketingCampaign(models.Model):
-    name = models.CharField(max_length=63, verbose_name='Nazwa kampani')
-    cookie_value = models.CharField(max_length=63, verbose_name='Wartość Cookiesa')
-    url_string = models.CharField(max_length=63, verbose_name='Fragment referencyjnego URL lub Referer')
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Kampania Marketingowa'
-        verbose_name_plural = 'Kampanie Marketingowe'
-
-
-class UserPrivate(models.Model):
-    def has_add_permission(self, request):
-        return False
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name='Użytkownik',
-        editable=False,
-    )
-
-    user_top = models.ForeignKey(
-        'self',
-        on_delete=models.SET_NULL,
-        verbose_name='Zarządca',
-        blank=True,
-        null=True,
-    )
-
-    campaign_source = models.ForeignKey(
-        MarketingCampaign,
-        on_delete=models.SET_NULL,
-        verbose_name='Kampania źródłowa',
-        blank=True,
-        null=True,
-    )
-
-    # more data about user here
-    accepted = models.BooleanField(default=False, verbose_name='Zaakceptowano')
-    first_name = models.CharField(max_length=31, blank=True, null=True, verbose_name='Imię')
-    second_name = models.CharField(max_length=31, blank=True, null=True, verbose_name='Drugie imię')
-    last_name = models.CharField(max_length=63, blank=True, null=True, verbose_name='Nazwisko')
-    phone_number = models.CharField(max_length=31, blank=True, null=True, verbose_name='Telefon')
-    slug = models.CharField(max_length=31, blank=True, null=True, verbose_name='slug')
-    note = models.TextField(null=True, blank=True, verbose_name='Notka', max_length=255)
-    lang = models.CharField(max_length=3, default='pl', verbose_name='Język', choices=(
-            ('pl', 'Polski'),
-            ('en', 'Angielski'),
-            ('ru', 'Rosyjski'),
-            ('de', 'Niemiecki'),
-        )
-    )
-    token = models.CharField(max_length=127, blank=True, null=True, verbose_name='Reset token')
-    token_end_of_validity = models.DateTimeField(null=True, blank=True, verbose_name='Ważność tokena')
-    country = models.CharField(max_length=63, blank=True, null=True, verbose_name='Kraj')
-    postal_code = models.CharField(max_length=31, blank=True, null=True, verbose_name='Kod poczt.')
-    city_name = models.CharField(max_length=31, blank=True, null=True, verbose_name='Miasto')
-    street_name = models.CharField(max_length=127, blank=True, null=True, verbose_name='Ulica')
-    home_number = models.CharField(max_length=63, blank=True, null=True, verbose_name='Dom/Mieszkanie')
-    promocode = models.CharField(max_length=63, blank=True, null=True, verbose_name='Kod promo')
-    lookup = models.CharField(max_length=255)
-    calculator_enabled = models.BooleanField(default=True, verbose_name='Dostępny kalkulator')
-    registered_at = models.DateTimeField(verbose_name='Data rejestracji')
-
-    def bets(self):
-        return '<a href="/admin/rest_api/bet/?q=%s" style="color:#ac0303">%s</a>' % (self.user.email, 'Licytacje')
-    bets.allow_tags = True
-    bets.short_description='Licytacje'
-
-    def email(self):
-        return self.user.email
-    email.shortdescription = 'Email'
-
-    def __str__(self):
-        return "{} {} ({})".format(
-            self.first_name,
-            self.last_name,
-            self.user.email
-        )
-    
-    def save(self, *args, **kwargs):
-        self.lookup = self.__str__()
-        if not self.id:
-            self.registered_at = timezone.now()
-        super().save(*args, **kwargs)
-
-    class Meta:
-        verbose_name = 'Uzytkownik'
-        verbose_name_plural = 'Uzytkownicy'
 
 class UserBusiness(models.Model):
     user = models.ForeignKey(

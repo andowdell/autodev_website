@@ -220,6 +220,14 @@ class AllianzExtractor:
                 key = cells[0].text_content()
                 value = cells[1].text_content()
                 car_data[key] = value
+        self.page.locator('#state').wait_for()
+        rows = self.page.locator('#state').locator('tr')
+        for row in rows.all():
+            cells = row.locator('td').all()
+            if (len(cells) >= 2):
+                key = cells[0].text_content()
+                value = cells[1].text_content()
+                car_data[key] = value
         car_data['Sonderausstattung'] = self.page.locator("#special").text_content()
         car_data['Serienausstattung'] = self.page.locator("#serien").text_content()
         ret_car['data'] = car_data

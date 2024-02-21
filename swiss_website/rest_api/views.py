@@ -466,6 +466,7 @@ class BetView(GenericAPIView):
 
         bet = Bet(
             user=request.user,
+            user_prev=userpriv,
             auction=auction,
             price=offer
         )

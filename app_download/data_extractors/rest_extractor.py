@@ -225,8 +225,10 @@ class RestExtractor():
         ret_car['brand_name'] = car.pop('Marke', None)
         if car.get('1. Inv.', None) is None:
             car['1. Inv.'] =  datetime.now().strftime("%d.%m.%Y")
-
-        ret_car['production_date'] = datetime.strptime(car.pop("1. Inv.", datetime.now().strftime("%d.%m.%Y")), "%d.%m.%Y").strftime("%Y-%m-%d")
+        try:
+            ret_car['production_date'] = datetime.strptime(car.pop("1. Inv.", datetime.now().strftime("%d.%m.%Y")), "%d.%m.%Y").strftime("%Y-%m-%d")
+        except:
+            ret_car['production_date'] = "2000-01-01"
         ret_car['run'] = car.pop('Km', '0').replace('\'', '')
         ret_car['images'] = car.pop('images', list())
         ret_car['data'] = car
