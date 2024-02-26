@@ -122,7 +122,6 @@ class AuctionSerializer(serializers.Serializer):
         instance.end_date = validated_data.get('end_date', instance.end_date)
         instance.data = validated_data.get('data', instance.data)
         instance.images_count = validated_data.get('images_count', instance.images_count)
-
         images = validated_data.pop('photos_list')
         # def img_name_cmp(a, b):
         #     if len(a.name) < len(b.name):

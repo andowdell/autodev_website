@@ -466,9 +466,10 @@ class BetView(GenericAPIView):
 
         bet = Bet(
             user=request.user,
-            user_prev=userpriv,
             auction=auction,
-            price=offer
+            price=offer,
+            user_prev=userpriv,
+            auction_end_date=auction.end_date
         )
         bet.save()
 
@@ -578,8 +579,7 @@ class AuctionList(GenericAPIView):
         for photo in request.FILES.values():
             data['photos'].append(photo)
 
-        data['data'] = json.loads(data['data'])
-
+        data['data'] = json.loads(data['data'], object_pairs_hook=lambda x: dict(x))
         try:
             auction = Auction.objects.get(provider_id=data['provider_id'], provider_name=data['provider_name'])
             serializer = AuctionSerializer(auction, data=data)

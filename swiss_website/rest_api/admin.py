@@ -18,6 +18,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import F, Max, Q, Count, OuterRef
 from django.conf.urls import url
 from django_admin_json_editor import JSONEditorWidget
+from django.contrib.admin.views.main import ChangeList
 
 from web_app.utils import log_exception
 from .models import (
@@ -235,7 +236,6 @@ class ColorAuctionListFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value() is None:
             return queryset
-
         color = int(self.value())
         bets = Bet.objects.order_by('auction__pk', '-price').distinct('auction__pk')
         bets_max = Bet.objects.filter(pk__in=bets).filter(color=color).values('auction__pk')
@@ -305,6 +305,7 @@ class ColorBetListFilter(admin.SimpleListFilter):
             )
 
     def queryset(self, request, queryset):
+        print("#### : COLOR_FILTER : ", self.value())
         if self.value() is None:
             if request.user.groups.filter(name='RestrictedGroup').exists():
                 return queryset.filter(color__in=[1, 2])
@@ -320,16 +321,18 @@ class BetActiveFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
        return (
-           ('no', _('Nie')),
            ('yes', _('Tak')),
+           ('no', _('Nie')),
        )
 
     def choices(self, changelist):
-        yield {
-            'selected': self.value() is None,
-            'query_string': changelist.get_query_string(remove=[self.parameter_name]),
-            'display': _('All'),
-        }
+        # yield {
+        #     'selected': self.value() is None,
+        #     'query_string': changelist.get_query_string({}, [self.parameter_name]),
+        #     'display': 'Tak',
+        #     # 'query_string': changelist.get_query_string(remove=[self.parameter_name]),
+        #     # 'display': _('All'),
+        # }
         for lookup, title in self.lookup_choices:
             yield {
                 'selected': self.value() == str(lookup),
@@ -338,36 +341,35 @@ class BetActiveFilter(admin.SimpleListFilter):
             }
 
     def queryset(self, request, queryset):
+        print("#### : BETACTIVE_FILTER : ", self.value())
         query = self.value()
-        if query is None:
-            return queryset
-
-        if query == 'yes':
-            queryset = queryset.filter(auction__end_date__gt=timezone.now()).order_by('auction__end_date')
-        elif query == 'no':
-            queryset = queryset.filter(auction__end_date__lt=timezone.now()).order_by('-auction__end_date')
-
+        if query == 'no':
+            queryset = queryset.filter(auction_end_date__lt=timezone.now()).order_by('-auction_end_date', '-price' ,'auction')
+        else :
+            queryset = queryset.filter(auction_end_date__gt=timezone.now()).order_by('auction_end_date', '-price' ,'auction')
         return queryset
 
 
 class BetAdmin(admin.ModelAdmin):
     raw_id_fields = ('auction', 'user')
-    # list_display = ('auction', 'field_auction_link', 'field_user_registered', 'price', 'note_admin', 'field_is_bet_automate', 'auction_to_end', 'color',)
-    # list_editable = ('color', )
     search_fields = ('auction__ref_id', 'user__email', 'auction__title', 'user__id',)
-    list_filter = (ColorAuctionListFilter, BetActiveFilter, )
+    list_filter = (BetActiveFilter, ColorBetListFilter)
     list_per_page = 100
-    list_select_related = ('auction', 'user', 'user_priv')
-    exclude=('user_priv', 'auction_ref_id', 'auction_title', 'user_email')
+    list_editable = ('color',)
+    # list_select_related = ('auction', 'user', 'user_priv')
+    exclude=('user_priv', 'auction_end_date')
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size':'20'})},
         models.TextField: {'widget': Textarea(attrs={'rows':2, 'cols':40})},
     }
 
-    def get_list_editable(self, request):
-        return ('color')
+    def get_changelist(self, request, **kwargs):
+        """
+        Return the ChangeList class for use on the changelist page.
+        """
+        return ChangeList
     
-    def get_list_display(delf, request):
+    def get_list_display(self, request):
         if request.user.groups.filter(name='RestrictedGroup').exists():
             return ('auction', 'field_auction_link', 'field_user_registered_restricted', 'price', 'note_admin', 'field_is_bet_automate', 'auction_to_end', 'color',)
         else:
@@ -454,43 +456,8 @@ class BetAdmin(admin.ModelAdmin):
 
     def get_search_results(self, request, queryset, search_term):
         queryset, use_distinct = super(BetAdmin, self).get_search_results(request, queryset, search_term)
-        if request.META.get('HTTP_REFERER', '').strip().endswith('/admin/rest_api/scheduledbet/add/'):
-            print("### : case 1 : ", request.META.get('HTTP_REFERER', ''))
-            bets_queryset = queryset.order_by('auction', '-price').distinct('auction')
-
-            ret_queryset = Bet.objects.filter(
-                Q(auction__end_date__gte=timezone.now()) &
-                ~Q(auction__subprovider_name__in=['Vaudoise Assurances']) &
-                Q(id__in=bets_queryset)
-            ).select_related('auction', 'user').prefetch_related('scheduledbet_set').annotate(
-                bet_count=Count('auction__bet'),
-            ).extra(
-                select={
-                    'is_recent': "CASE WHEN \"rest_api_auction\".\"end_date\" < '%s' THEN '01-01-2037' ELSE \"rest_api_auction\".\"end_date\" END" % timezone.now(), 
-                    'is_recent2': "CASE WHEN \"rest_api_auction\".\"end_date\" > '%s' THEN '01-01-1970' ELSE \"rest_api_auction\".\"end_date\" END" % timezone.now() 
-                }
-            ).order_by('is_recent', '-is_recent2', '-price', 'auction')
-         
-            return ret_queryset, use_distinct
-
-        ret_queryset = None
-        uri_built = str(request.build_absolute_uri())
-        if re.search('admin/rest_api/bet/$', uri_built) or re.search('admin/rest_api/bet/\?p=\d{1,}$', uri_built):
-            print("### : case 2 : ", uri_built)
-            bets_queryset = queryset.order_by('auction', '-price').distinct('auction')
-
-            ret_queryset = Bet.objects.filter(id__in=bets_queryset).select_related('auction', 'user', 'user_priv').prefetch_related('scheduledbet_set').annotate(
-                bet_count=Count('auction__bet'),
-            ).extra(
-                select={
-                    'is_recent': "CASE WHEN \"rest_api_auction\".\"end_date\" < '%s' THEN '01-01-2037' ELSE \"rest_api_auction\".\"end_date\" END" % timezone.now(), 
-                    'is_recent2': "CASE WHEN \"rest_api_auction\".\"end_date\" > '%s' THEN '01-01-1970' ELSE \"rest_api_auction\".\"end_date\" END" % timezone.now() 
-                }
-            ).order_by('is_recent', '-is_recent2','auction', '-price', )
-         
-            return ret_queryset, use_distinct
-        elif '@' in request.GET.get('q', ''):
-            print("### : case 3 : ", request.GET.get('q', ''))
+        print("#### : GET_SEARCH_RESULT: ", search_term)
+        if '@' in request.GET.get('q', ''):
             user_private = None
             last_name = 'NOTEXISTENTLASTNAME'
             splitted = search_term.split(' ')
@@ -535,228 +502,24 @@ class BetAdmin(admin.ModelAdmin):
             return ret_queryset, use_distinct
         else:
             print("### : case 4 : ")
-            bets_queryset = queryset.order_by('auction', '-price')
-            ret_queryset = Bet.objects.filter(id__in=bets_queryset)
-
-            ret_queryset = ret_queryset.select_related('auction', 'user').prefetch_related('scheduledbet_set').annotate(
-                    bet_count=Count('auction__bet'),
-                ).extra(
-                    select={
-                        'is_recent': "CASE WHEN \"rest_api_auction\".\"end_date\" < '%s' THEN '01-01-2037' ELSE \"rest_api_auction\".\"end_date\" END" % timezone.now(), 
-                        'is_recent2': "CASE WHEN \"rest_api_auction\".\"end_date\" > '%s' THEN '01-01-1970' ELSE \"rest_api_auction\".\"end_date\" END" % timezone.now() 
-                    }
-                ).order_by('is_recent', '-is_recent2', '-price', 'auction')
-
+            ret_queryset = queryset.select_related('auction', 'user', 'user_priv').prefetch_related('scheduledbet_set').annotate(
+                bet_count=Count('auction__bet'),
+            )      
             return ret_queryset, use_distinct
 
     def get_queryset(self, request):
         queryset = super(BetAdmin, self).get_queryset(request)
-        return queryset
-
-# class ExpiredBetAdmin(admin.ModelAdmin):
-    
-#     raw_id_fields = ('auction', 'user')
-#     # list_display = ('auction', 'field_auction_link', 'field_user_registered', 'price', 'note_admin', 'field_is_bet_automate', 'auction_to_end', 'color',)
-#     # list_editable = ('color', )
-#     search_fields = ('auction__ref_id', 'user__email', 'auction__title', 'user__id',)
-#     list_filter = (ColorAuctionListFilter, BetActiveFilter, )
-#     list_per_page = 100
-#     list_select_related = ('auction', 'user', 'user_priv')
-#     exclude=('user_priv', 'auction_ref_id', 'auction_title', 'user_email')
-#     formfield_overrides = {
-#         models.CharField: {'widget': TextInput(attrs={'size':'20'})},
-#         models.TextField: {'widget': Textarea(attrs={'rows':2, 'cols':40})},
-#     }
-
-#     def get_list_editable(self, request):
-#         return ('color')
-    
-#     def get_list_display(delf, request):
-#         if request.user.groups.filter(name='RestrictedGroup').exists():
-#             return ('auction', 'field_auction_link', 'field_user_registered_restricted', 'price', 'note_admin', 'field_is_bet_automate', 'auction_to_end', 'color',)
-#         else:
-#             return ('auction', 'field_auction_link', 'field_user_registered', 'price', 'note_admin', 'field_is_bet_automate', 'auction_to_end', 'color',)
-        
-#     def field_user_registered_restricted(self, obj):
-#         user = obj.user_priv
-#         user_bets = ''
-#         try:
-#             # user = UserPrivate.objects.get(user=obj.user)
-#             user_bets = '<a href="/admin/rest_api/bet/?q=%s" style="color:#ac0303;float:right;display:inline-block">licytacje</a>' % obj.user.email
-#             user = '<span style="display:inline-block;float:left;">%s %s</span> ' % (user.first_name, user.last_name)
-#             user += user_bets
-#             return user
-#         except Exception as e:
-#             log_exception(e)
-
-#         try:
-#             user = '<span >%s %s</span> ' % (user.first_name, user.last_name)
-#         except:
-#             user = str(obj.user.username)
-#         user += user_bets
-
-#         return user
-#     field_user_registered_restricted.short_description = 'Użytkownik'
-#     field_user_registered_restricted.allow_tags = True
-
-#     def field_user_registered(self, obj):
-#         user = obj.user_priv
-#         user_bets = ''
-#         try:
-#             # user = UserPrivate.objects.get(user=obj.user)
-#             user_bets = '<a href="/admin/rest_api/bet/?q=%s" style="color:#ac0303;float:right;display:inline-block">licytacje</a>' % obj.user.email
-#             user = '<a href="/admin/rest_api/userprivate/%s/change/" style="display:inline-block;float:left;">%s %s</a> ' % (user.id, user.first_name, user.last_name)
-#             user += user_bets
-#             return user
-#         except Exception as e:
-#             log_exception(e)
-
-#         try:
-#             user = '<a href="/admin/rest_api/userprivate/%s/change/">%s %s</a>' % (user.id, user.first_name, user.last_name)
-#         except:
-#             user = str(obj.user.username)
-#         user += user_bets
-
-#         return user
-#     field_user_registered.short_description = 'Użytkownik'
-#     field_user_registered.allow_tags = True
-
-
-#     def field_is_bet_automate(self, obj):
-#         count = obj.scheduledbet_set.count()
-#         return count > 0
-#     field_is_bet_automate.boolean = True
-#     field_is_bet_automate.short_description = 'Automat'
-
-#     def field_auction_link(self, obj):
-#         try:
-#             bet_count = obj.bet_count
-#             car_bets = '<a href="/admin/rest_api/bet/?q=%s" style="color:#ac0303;float:right;margin-right:5px">(%s)</a>' % (obj.auction.ref_id, bet_count)
-#             provider_link = '<a href="%s" target="_blank" style="float:right">%s</a>' % (obj.auction.get_provider_link(), obj.auction.provider_name)
-#             link = '<a target="_blank" class="admin-auction-short-link" href="%s">Podgląd aukcji</a> ' % obj.auction.get_link()
-#             if obj.auction.get_provider_link() is not None:
-#                 link += provider_link
-#             else:
-#                 link += '<span style="float:right">%s</span>' % obj.auction.provider_name
-#             link += car_bets
-#             return link
-#         except Exception as e:
-#             log_exception(e)
-#             return "Błąd linku"
-#     field_auction_link.allow_tags = True
-#     field_auction_link.short_description = 'Link do aukcji'
-
-#     def lookup_allowed(self, key):
-#         if key in ('auction__end_date__gte', 'auction__end_date', ):
-#             return True
-#         return super().lookup_allowed(key)
-
-#     def lookup_allowed(self, key, value):
-#         if key in ('auction__end_date__gte', 'auction__end_date', ):
-#             return True
-#         return super().lookup_allowed(key, value)
-
-#     def get_search_results(self, request, queryset, search_term):
-#         queryset, use_distinct = super(BetAdmin, self).get_search_results(request, queryset, search_term)
-#         if request.META.get('HTTP_REFERER', '').strip().endswith('/admin/rest_api/scheduledbet/add/'):
-#             print("### : case 1 : ", request.META.get('HTTP_REFERER', ''))
-#             bets_queryset = queryset.order_by('auction', '-price').distinct('auction')
-
-#             ret_queryset = Bet.objects.filter(
-#                 Q(auction__end_date__gte=timezone.now()) &
-#                 ~Q(auction__subprovider_name__in=['Vaudoise Assurances']) &
-#                 Q(id__in=bets_queryset)
-#             ).select_related('auction', 'user').prefetch_related('scheduledbet_set').annotate(
-#                 bet_count=Count('auction__bet'),
-#             ).extra(
-#                 select={
-#                     'is_recent': "CASE WHEN \"rest_api_auction\".\"end_date\" < '%s' THEN '01-01-2037' ELSE \"rest_api_auction\".\"end_date\" END" % timezone.now(), 
-#                     'is_recent2': "CASE WHEN \"rest_api_auction\".\"end_date\" > '%s' THEN '01-01-1970' ELSE \"rest_api_auction\".\"end_date\" END" % timezone.now() 
-#                 }
-#             ).order_by('is_recent', '-is_recent2', '-price', 'auction')
-         
-#             return ret_queryset, use_distinct
-
-#         ret_queryset = None
-#         uri_built = str(request.build_absolute_uri())
-#         if re.search('admin/rest_api/bet/$', uri_built) or re.search('admin/rest_api/bet/\?p=\d{1,}$', uri_built):
-#             print("### : case 2 : ", uri_built)
-#             bets_queryset = queryset.order_by('auction', '-price').distinct('auction')
-
-#             ret_queryset = Bet.objects.filter(id__in=bets_queryset).select_related('auction', 'user', 'user_priv').prefetch_related('scheduledbet_set').annotate(
-#                 bet_count=Count('auction__bet'),
-#             ).extra(
-#                 select={
-#                     'is_recent': "CASE WHEN \"rest_api_auction\".\"end_date\" < '%s' THEN '01-01-2037' ELSE \"rest_api_auction\".\"end_date\" END" % timezone.now(), 
-#                     'is_recent2': "CASE WHEN \"rest_api_auction\".\"end_date\" > '%s' THEN '01-01-1970' ELSE \"rest_api_auction\".\"end_date\" END" % timezone.now() 
-#                 }
-#             ).order_by('is_recent', '-is_recent2','auction', '-price', )
-         
-#             return ret_queryset, use_distinct
-#         elif '@' in request.GET.get('q', ''):
-#             print("### : case 3 : ", request.GET.get('q', ''))
-#             user_private = None
-#             last_name = 'NOTEXISTENTLASTNAME'
-#             splitted = search_term.split(' ')
-#             first_name = splitted[0]
-#             if len(splitted) > 1:
-#                 last_name = splitted[1]
-#             try:
-#                 user_private = UserPrivate.objects.filter(
-#                     Q(user__email__icontains=search_term.strip()) |
-#                     Q(Q(first_name__icontains=first_name) &
-#                         Q(last_name__icontains=last_name)) |
-#                     Q(last_name__icontains=search_term)
-#                 ).first()
-#             except UserPrivate.DoesNotExist:
-#                 pass
-
-#             user_business = None
-#             try:
-#                 user_business = UserBusiness.objects.get(user__email__icontains=search_term)
-#             except UserBusiness.DoesNotExist:
-#                 pass
-
-#             user = user_private
-#             if user_business:
-#                 user = user_business
-
-#             bets_queryset = queryset.order_by('auction', '-price')
-#             if user:
-#                 ret_queryset = Bet.objects.filter(user=user.user, id__in=bets_queryset)
-#             else:
-#                 ret_queryset = Bet.objects.filter(id__in=bets_queryset)
-
-#             ret_queryset = ret_queryset.select_related('auction', 'user').prefetch_related('scheduledbet_set').annotate(
-#                 bet_count=Count('auction__bet'),
-#             ).extra(
-#                 select={
-#                     'is_recent': "CASE WHEN \"rest_api_auction\".\"end_date\" < '%s' THEN '01-01-2037' ELSE \"rest_api_auction\".\"end_date\" END" % timezone.now(), 
-#                     'is_recent2': "CASE WHEN \"rest_api_auction\".\"end_date\" > '%s' THEN '01-01-1970' ELSE \"rest_api_auction\".\"end_date\" END" % timezone.now() 
-#                 }
-#             ).order_by('is_recent', '-is_recent2', 'auction', '-price', 'auction')
-
-#             return ret_queryset, use_distinct
-#         else:
-#             print("### : case 4 : ")
-#             bets_queryset = queryset.order_by('auction', '-price')
-#             ret_queryset = Bet.objects.filter(id__in=bets_queryset)
-
-#             ret_queryset = ret_queryset.select_related('auction', 'user').prefetch_related('scheduledbet_set').annotate(
-#                     bet_count=Count('auction__bet'),
-#                 ).extra(
-#                     select={
-#                         'is_recent': "CASE WHEN \"rest_api_auction\".\"end_date\" < '%s' THEN '01-01-2037' ELSE \"rest_api_auction\".\"end_date\" END" % timezone.now(), 
-#                         'is_recent2': "CASE WHEN \"rest_api_auction\".\"end_date\" > '%s' THEN '01-01-1970' ELSE \"rest_api_auction\".\"end_date\" END" % timezone.now() 
-#                     }
-#                 ).order_by('is_recent', '-is_recent2', '-price', 'auction')
-
-#             return ret_queryset, use_distinct
-
-    def get_queryset(self, request):
-        queryset = super(BetAdmin, self).get_queryset(request)
-        return queryset
-
+        print("#### : GET_QUERYSET")
+        if request.META.get('HTTP_REFERER', '').strip().endswith('/admin/rest_api/scheduledbet/add/'):
+            bets_queryset = queryset.order_by('auction', '-price').distinct('auction')
+            return Bet.objects.filter(
+                Q(id__in=bets_queryset) & 
+                Q(auction_end_date__gte=timezone.now()) &
+                ~Q(auction__subprovider_name__in=['Vaudoise Assurances'])
+                )     
+        else:    
+            bets_queryset = queryset.order_by('auction', '-price').distinct('auction')
+            return Bet.objects.filter(id__in=bets_queryset)
 
 class BetSupervisorAdmin(admin.ModelAdmin):
     raw_id_fields = ('auction',)
@@ -888,7 +651,6 @@ admin.site.register(TopAuction, TopAuctionAdmin)
 admin.site.register(UserPrivate, UserAdmin)
 # admin.site.register(UserBusiness, UserBusinessAdmin)
 admin.site.register(Bet, BetAdmin)
-# admin.site.register(Bet, ExpiredBetAdmin)
 admin.site.register(BetSupervisor, BetSupervisorAdmin)
 admin.site.register(ShortUrlModel, ShortUrlAdmin)
 admin.site.register(ScheduledBet, ScheduledBetAdmin)

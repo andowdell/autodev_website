@@ -449,12 +449,6 @@ class Bet(models.Model):
         verbose_name='Użytkownik',
         #editable=True,
     )
-    user_priv = models.ForeignKey(
-        UserPrivate,
-        on_delete=models.CASCADE,
-        verbose_name='Użytkownik1',
-        null=True
-    )
     color = models.IntegerField(verbose_name='Kolor', default=0, choices=(
         (0, 'Biały'),
         (1, 'Zielony'),
@@ -465,7 +459,14 @@ class Bet(models.Model):
     ))
     vin = models.CharField(null=True, blank=True, default='', verbose_name='VIN', max_length=32)
     invoice_price = models.IntegerField(null=True, blank=True, verbose_name='Cena na fakturze [CHF]')
-
+    user_priv = models.ForeignKey(
+        UserPrivate,
+        on_delete=models.CASCADE,
+        verbose_name='Użytkownik1',
+        null=True
+    )
+    auction_end_date = models.DateTimeField(verbose_name='Zakończenie', null=True)
+    
     def note_admin(self):
         note = '<span style="float:left" class="admin-auction-short-note">' + self.note + '</span>'
         return note
@@ -559,11 +560,12 @@ class Bet(models.Model):
         verbose_name = 'Licytacja'
         verbose_name_plural = 'Licytacje'
         indexes = [
-            models.Index(fields=['auction_id', "-price"]),
-            models.Index(fields=['-date']),
-            models.Index(fields=['user', '-price']),
-            models.Index(fields=['user']),
-            models.Index(fields=['-date', 'user', '-price']),
+            models.Index(fields=['id', 'auction_id', '-auction_end_date']),
+            models.Index(fields=['auction_id', '-price']),
+            models.Index(fields=['user_id']),
+            models.Index(fields=['user_priv_id']),
+            models.Index(fields=['auction_end_date']),
+            models.Index(fields=['color']),
         ]
 
 

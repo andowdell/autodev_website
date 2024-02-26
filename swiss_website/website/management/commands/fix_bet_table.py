@@ -16,7 +16,7 @@ class Command(BaseCommand):
     help = 'Fix bets table'
 
     def handle(self, *args, **options):
-        bets = Bet.objects.all()
+        bets = Bet.objects.all().select_related('auction')
         for bet in bets:
             if not bet.user:
                 print(bet.id, ":no user")
@@ -26,6 +26,7 @@ class Command(BaseCommand):
             except UserPrivate.DoesNotExist as e:
                 print(bet.id, ":invalid user")
                 continue
-            print(bet.id, ":find user")
+            print(bet.id, ":find user: ", bet.auction.end_date)
             bet.user_priv = user
+            bet.auction_end_date = bet.auction.end_date
             bet.save()

@@ -558,10 +558,8 @@ class AuctionView(View):
         prev_offer = None
         if request.user.is_authenticated:
             price = Bet.objects.filter(user=request.user, auction=auction).aggregate(Max('price'))
-            print(price)
             if price['price__max']:
                 prev_offer = price['price__max']
-
         return custom_render(
             request,
             self.template_name,

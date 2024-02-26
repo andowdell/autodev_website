@@ -193,8 +193,8 @@ class AxaExtractor:
             print('[Downloader][AXA][%s] The auction was already downloaded' % ret_car['provider_id'])
             logger.info('[Downloader][AXA][%s] The auction was already downloaded' % ret_car['provider_id'])
             return
-        #self.page.goto('https://www.carauction.axa.ch/' + car['au'], timeout=10000)
-        self.page.get_by_role('img', name=car['at']).click()
+        car_id = car['a']
+        self.page.locator(f'[data-id="{car_id}"]').get_by_role('img').click()
         ret_car['images'] = list()
         self.page.wait_for_load_state('networkidle')
         self.page.wait_for_selector('#slider')
@@ -227,8 +227,19 @@ class AxaExtractor:
                 key = cells[0].text_content()
                 value = cells[1].text_content()
                 car_data[key] = value
+        rows = self.page.locator('#state').locator('tr')
+        for row in rows.all():
+            cells = row.locator('td').all()
+            if (len(cells) >= 2):
+                key = cells[0].text_content()
+                value = cells[1].text_content()
+                car_data[key] = value
         car_data['Sonderausstattung'] = self.page.locator("#special").text_content()
         car_data['Serienausstattung'] = self.page.locator("#serien").text_content()
+        car_data['Beschädigungen'] = self.page.locator("#damage").text_content()
+        car_data['Vorschaden'] = self.page.locator("#preDamagesPart").text_content()
+        car_data['Brauchbare Teile'] = self.page.locator("#usablePart").text_content()
+        car_data['Zusatzinformationen'] = self.page.locator("#addinfo").text_content()
         ret_car['data'] = car_data
         logger.info('[Downloader][AXA][%s] New auction downloaded' % ret_car['provider_id'] )
         print('[Downloader][AXA][%s] New auction downloaded' % ret_car['provider_id'] )
@@ -238,13 +249,13 @@ class AxaExtractor:
             
     def _is_main_page(self):
         try:
-            expect(self.page.locator("#myaxaId")).to_be_visible(timeout=1000)
+            expect(self.page.locator("#myaxaId")).to_be_visible()
             return True
         except AssertionError:
             return False
     def _is_verification_page(self):
         try:
-            expect(self.page.locator("#mfaDialog")).to_be_visible(timeout=1000)
+            expect(self.page.locator("#mfaDialog")).to_be_visible()
             return True
         except AssertionError:
             return False

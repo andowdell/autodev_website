@@ -106,8 +106,9 @@ class Application:
 
          
     def upload_updates(self):
+        # insurance_dirs = ['rest', 'scc', 'allianz']
+        # insurance_dirs = ['allianz']
         insurance_dirs = ['rest', 'scc', 'allianz', 'axa']
-        # insurance_dirs = ['rest']
 
         for directory in insurance_dirs:
             path = os.path.join(DATA_DIR, directory)
@@ -215,6 +216,7 @@ class Application:
                         capture_message(response.text)
                 except Exception as e:
                     capture_exception(e)
+                # break
 
 if __name__ == '__main__':
     app = Application(CONFIG_FILE, CODES_DIR)

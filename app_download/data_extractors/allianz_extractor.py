@@ -238,14 +238,14 @@ class AllianzExtractor:
     
     def _is_main_page(self):
         try:
-            expect(self.page.locator("#auctiontable")).to_be_visible(timeout=1000)
+            expect(self.page.locator("#auctiontable")).to_be_visible()
             return True
         except:
             return False
 
     def _is_verification_page(self):
         try:
-            expect(self.page.locator("#mfaDialog")).to_be_visible(timeout=1000)
+            expect(self.page.locator("#mfaDialog")).to_be_visible()
             return True
         except:
             return False
@@ -299,15 +299,15 @@ class AllianzExtractor:
                 logger.info('[Downloader][ALLIANZ] Sign in...')
                 print('[Downloader][ALLIANZ] Sign in...')
                 if not self._login():
-                    print('[Downloader][ALIANZ] Failed due to signing in... : AXA Server Error')
-                    logger.info('[Downloader][ALIANZ] Failed due to signing in... : AXA Server Error')
+                    print('[Downloader][ALLIANZ] Failed due to signing in... : ALLIANZ Server Error')
+                    logger.info('[Downloader][ALLIANZ] Failed due to signing in... : ALLIANZ Server Error')
                     return
             self.get_car_data()
             logger.info('[Downloader][ALLIANZ] Finish downloading')
             print('[Downloader][ALLIANZ] Finish downloading')
         except Exception as e:
-            logger.error('[Downloader][ALIANZ] Downloading failed due to ', e)
-            print('[Downloader][ALIANZ] Downloading failed due to ', e)
+            logger.error('[Downloader][ALLIANZ] Downloading failed due to ', e)
+            print('[Downloader][ALLIANZ] Downloading failed due to ', e)
             return
         # self.page.wait_for_timeout(2000000)
         self.context.close()
